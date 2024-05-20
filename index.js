@@ -11,10 +11,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 
 
-// app.get('/',async (req,res)=>{
-//     let result = await student.create(req.body);
-//     res.json(result);
-// })
 
 app.listen(port,()=>{
     console.log(`The server is listening at ${port}`)
