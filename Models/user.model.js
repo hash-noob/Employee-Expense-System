@@ -8,4 +8,6 @@ const userSchema = mongoose.Schema({
     role:String
 })
 
-const studentModel = mongoose.model("user",userSchema)
+const userModel = mongoose.model("user",userSchema)
+
+module.exports= userModel
