@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import './App.css'
 
 function App() {
@@ -50,9 +48,12 @@ function App() {
         </form>
         <p id="message"></p>
       </div>
-      </div>
-    </>
-  )
+    </div>
+  );
+};
+
+function App() {
+  return <Dashboard />;
 }
 
-export default App
+export default App;
