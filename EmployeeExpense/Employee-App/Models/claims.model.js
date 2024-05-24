@@ -1,9 +1,10 @@
 const mongoose=require('mongoose')
 const claimsschema=mongoose.Schema({
-    claimId : String, 
+ 
+    claimId:String,
     eid : String,
     billsArray:[
-        {type : String}
+        {billId:String}
     ],
     billdescription:String,
     status:String,
