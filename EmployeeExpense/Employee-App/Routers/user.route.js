@@ -49,7 +49,7 @@ Router.post("/login",async(req,res)=>{
         try{
         //If password matches generate a token and send to client
         if(match){
-            const token = jwt.sign(req.body, "secretKey", { expiresIn: '1h' });
+            const token = jwt.sign(req.body, "secretKey");
 
             // Send token to client
             res.status(200).send({ token });
@@ -95,14 +95,61 @@ Router.get('/pending-bills/',authenticateToken, async (req, res) => {
     }
 });
 
-Router.post('/bills/',authenticateToken,async(req,res)=>{
+Router.get('/bills',authenticateToken,async(req,res)=>{
     const eid = req.user.eid;
     try {
-        const bill = await billsModel.create({ "claimedBy": eid,...req.body});
+        const bills = await billsModel.find({ claimedBy: eid});
+        res.json(bills);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+    }
+})
+
+Router.get('/claims',authenticateToken,async(req,res)=>{
+    const eid = req.user.eid;
+    try {
+        const claims = await claimModel.find({"eid": eid});
+        res.json(claims);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+    }
+})
+
+Router.put('/claims',async(req,res)=>{
+    const {claimId}=req.body;
+    const {_id} = await claimModel.findOne({"claimId":claimId})
+    const updatedClaim = await claimModel.findByIdAndUpdate(_id,req.body)
+    if(updatedClaim){
+        res.status(200).json(updatedClaim)
+    }
+    else{
+        res.status(404).send("error")
+    }
+})
+
+Router.post('/bills/',async(req,res)=>{
+    //onst eid = req.user.eid;
+    try {
+        const bill = await billsModel.create(req.body);
         res.json(bill);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 })
+
+Router.put('/claims/withdraw',async(req,res)=>{
+    const {claimId}=req.body;
+    const {_id} = await claimModel.findOne({"claimId":claimId})
+    const updatedClaim = await claimModel.findByIdAndUpdate(_id,{"status":"withdraw"})
+    if(updatedClaim){
+        res.status(200).json(updatedClaim)
+    }
+    else{
+        res.status(404).send("error")
+    }
+})
+
 module.exports = Router 

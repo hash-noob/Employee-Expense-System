@@ -8,7 +8,6 @@ const expenseschema=mongoose.Schema({
     billImage:Buffer,
     billCost:Number,
     datedOn:Date,
-    status:String,
     remark:String,
     claimedBy:String  //eid
 })
