@@ -65,10 +65,6 @@ Router.post("/login",async(req,res)=>{
     }
 })
 
-Router.post("/fileClaim",async (req,res)=>{
-    result =await claimModel.create(req.body)
-    res.send(result)
-})
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -139,6 +135,12 @@ Router.post('/bills/',async(req,res)=>{
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 })
+
+Router.post("/fileClaim",async (req,res)=>{
+    result = await claimModel.create(req.body)
+    res.send(result)
+})
+
 
 Router.put('/claims/withdraw',async(req,res)=>{
     const {claimId}=req.body;

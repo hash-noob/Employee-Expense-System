@@ -1,10 +1,10 @@
 const mongoose=require('mongoose')
 const expenseschema=mongoose.Schema({
-    expenseId:String,
-    billNumber:{
-        type:Number,
-        unique:true
+    expenseId:{
+        type : String,
+        unique : true
     },
+    billNumber:Number,
     billImage:Buffer,
     billCost:Number,
     datedOn:Date,
