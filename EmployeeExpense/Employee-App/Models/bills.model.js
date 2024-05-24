@@ -10,7 +10,7 @@ const expenseschema=mongoose.Schema({
     datedOn:Date,
     status:String,
     remark:String,
-    claimedBy:String,
+    claimedBy:String  //eid
 })
 const billsmodel=mongoose.model("BillsCollection",expenseschema)
 module.exports=billsmodel

@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 
 app.use("/api/user",userRouter)
-
+app.use("/api/manager",managerRouter)
 app.post("/",(req,res)=>{
     res.send('Connected to node.')
 })

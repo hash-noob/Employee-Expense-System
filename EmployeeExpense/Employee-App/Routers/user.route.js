@@ -21,16 +21,17 @@ async function hashPassword(plainPassword) {
 
 
 Router.post("/signup",async(req,res)=>{
-    const exists = await userModel.find({email:req.body.email})
+    const exists = await userModel.find({eid:req.body.eid})
     if(exists.length!==0){
         res.send("User already exists")
     }
     else{
         const plainPassword = req.body.password
+        console.log(req.body);
         req.body.password=await hashPassword(plainPassword);
         user=await userModel.create(req.body)
         login = await loginModel.create({
-            email:req.body.email,
+            eid:req.body.eid,
             password:req.body.password
         })
         res.json(user)
@@ -39,7 +40,7 @@ Router.post("/signup",async(req,res)=>{
 
 Router.post("/login",async(req,res)=>{
 
-    const user = await loginModel.find({email:req.body.email})
+    const user = await loginModel.find({eid:req.body.eid})
     if(user.length===0){
         res.status(404).send("User doesn't exist");
     }
@@ -65,7 +66,7 @@ Router.post("/login",async(req,res)=>{
 })
 
 Router.post("/fileClaim",async (req,res)=>{
-    result = claimModel.create(req.body)
+    result =await claimModel.create(req.body)
     res.send(result)
 })
 
@@ -84,9 +85,9 @@ function authenticateToken(req, res, next) {
 
 Router.get('/pending-bills/',authenticateToken, async (req, res) => {
 
-    const email = req.user.email;
+    const eid = req.user.eid;
     try {
-        const pendingBills = await billsModel.find({ claimedBy: email, status: 'pending' });
+        const pendingBills = await billsModel.find({ claimedBy: eid, status: 'pending' });
         res.json(pendingBills);
     } catch (err) {
         console.error(err);
@@ -95,9 +96,9 @@ Router.get('/pending-bills/',authenticateToken, async (req, res) => {
 });
 
 Router.post('/bills/',authenticateToken,async(req,res)=>{
-    const email = req.user.email;
+    const eid = req.user.eid;
     try {
-        const bill = await billsModel.create({ "claimedBy": email,...req.body});
+        const bill = await billsModel.create({ "claimedBy": eid,...req.body});
         res.json(bill);
     } catch (err) {
         console.error(err);

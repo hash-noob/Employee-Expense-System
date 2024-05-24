@@ -1,7 +1,7 @@
 const mongoose=require('mongoose')
 const managerschema=mongoose.Schema(
     {
-        mid:Number,
+        mid:String,
         mname:String,
         email:String,
         password:String
