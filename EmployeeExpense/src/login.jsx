@@ -49,11 +49,8 @@ function App() {
         <p id="message"></p>
       </div>
     </div>
+    </>
   );
 };
-
-function App() {
-  return <Dashboard />;
-}
 
 export default App;
