@@ -1,10 +1,15 @@
 const mongoose=require('mongoose')
 const claimsschema=mongoose.Schema({
-    eid:Number,
+    claimId : String, 
+    eid : String,
+    billsArray:[
+        {type : String}
+    ],
     billdescription:String,
     status:String,
     DateofFiling:Date,
-    Reviewer:String,
+    ReviewerId:String,
+    reviewerRemark : String,
     Amount:Number,
     Attachment:Buffer
 })
