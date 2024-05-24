@@ -1,7 +1,9 @@
 const userModel = require("../Models/user.model")
 const loginModel = require("../Models/login.model")
 const claimModel = require("../Models/claims.model")
+const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 const express = require("express")
 const Router = express.Router() 
 
@@ -43,19 +45,22 @@ Router.post("/login",async(req,res)=>{
     }
     else{
         const match = await bcrypt.compare(req.body.password,user[0].password)
+        try{
+        //If password matches generate a token and send to client
         if(match){
-            jwt.sign(req.body.email,"axcd-2346",{expiresIn : "1h" },(err,token)=>{
-                if(err){
-                    res.send(err)
-                }else{
-                    res.json({token});
-                }
-            })
-            res.send("Login success");
+            const token = jwt.sign(req.body, "secretKey", { expiresIn: '1h' });
+
+            // Send token to client
+            res.status(200).send({ token });
+            
         }
         else{
             res.status(401).send("Invalid cred");
         }
+        } catch (error) {
+            res.status(500).send({ message: 'Internal server error' });
+        }
+        
     }
 })
 
@@ -64,4 +69,39 @@ Router.post("/fileClaim",async (req,res)=>{
     res.send(result)
 })
 
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (!token) return res.sendStatus(401);
+  
+    jwt.verify(token, "secretKey", (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+    });
+  }
+
+Router.get('/pending-bills/',authenticateToken, async (req, res) => {
+
+    const email = req.user.email;
+    try {
+        const pendingBills = await billsModel.find({ claimedBy: email, status: 'pending' });
+        res.json(pendingBills);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+    }
+});
+
+Router.post('/bills/',authenticateToken,async(req,res)=>{
+    const email = req.user.email;
+    try {
+        const bill = await billsModel.create({ "claimedBy": email,...req.body});
+        res.json(bill);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+    }
+})
 module.exports = Router 
