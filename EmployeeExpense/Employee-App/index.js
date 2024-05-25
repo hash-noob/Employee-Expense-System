@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const userRouter = require("./Routers/user.route")
 const managerRouter = require("./Routers/manager.route")
@@ -11,6 +12,19 @@ const port = process.env.PORT;
 app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+
+// Enable CORS for preflight requests
+app.options('*', cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+
+
+  
 app.use("/api/user",userRouter)
 app.use("/api/manager",managerRouter)
 app.post("/",(req,res)=>{
