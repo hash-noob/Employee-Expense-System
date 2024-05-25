@@ -2,7 +2,9 @@ import './App.css'
 import BillContainer from './BillContainer';
 import RequestList from './RequestList';
 import Sidebar from './SideBar';
+import AddClaimPane from './AddClaimPane';
 import React from 'react';
+
 
 
 const requests = [
@@ -79,6 +81,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex">
+     <AddClaimPane />
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <main className="flex-1 p-6">

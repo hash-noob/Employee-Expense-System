@@ -2,6 +2,7 @@ const userModel = require("../Models/user.model")
 const loginModel = require("../Models/login.model")
 const claimModel = require("../Models/claims.model")
 const billsModel = require("../Models/bills.model")
+const getBills = require("../Fetchers/BillFetcher").getBills
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const express = require("express")
@@ -76,7 +77,7 @@ function authenticateToken(req, res, next) {
   
     jwt.verify(token, "secretKey", (err, user) => {
       if (err) return res.sendStatus(403);
-      req.user = user;
+      req.user = user.eid;
       next();
     });
   }
@@ -155,5 +156,7 @@ Router.put('/claims/withdraw',async(req,res)=>{
         res.status(404).send("error")
     }
 })
+
+
 
 module.exports = Router 

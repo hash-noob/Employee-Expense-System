@@ -1,6 +1,6 @@
 import React from "react";
 import RequestCard from "./RequestCard";
-
+import FloatingButton from "./FloatingButton";
 
 
 const RequestList = ({ requests }) => (
@@ -11,6 +11,7 @@ const RequestList = ({ requests }) => (
           <RequestCard key={index} request={request} />
         ))}
       </div>
+      <FloatingButton/>
     </div>
   );
 

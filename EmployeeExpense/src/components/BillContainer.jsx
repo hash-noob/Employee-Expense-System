@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 
 const BillCard = ({ bill }) => (
@@ -23,36 +24,22 @@ const BillGrid = ({ bills }) => (
   </div>
 );
 
-// Example usage within a parent component
+
 const BillContainer = () => {
-  const bills = [
+  let bills=[
     {
-      title: 'Bill 1',
-      description: 'Description of bill 1',
-      link: '#',
-    },
-    {
-      title: 'Bill 2',
-      description: 'Description of bill 2',
-      link: '#',
-    },
-    {
-      title: 'Bill 3',
-      description: 'Description of bill 3',
-      link: '#',
-    },
-    {
-      title: 'Bill 4',
-      description: 'Description of bill 4',
-      link: '#',
-    },
-    {
-      title: 'Bill 5',
-      description: 'Description of bill 5',
-      link: '#',
-    },
-    // Add more bills as needed
-  ];
+      title : "Bill1",
+      description : "omg",
+      link : "link1"
+    }
+  ]
+  const getBills= async ()=>{
+    let result = await axios.get("http://localhost:3001/api/user/bills",{
+      headers:{
+        
+      }
+    })
+  }
 
   return (
     <div className="p-6">
