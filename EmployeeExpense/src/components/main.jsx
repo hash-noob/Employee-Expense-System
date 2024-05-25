@@ -7,6 +7,6 @@ import Dashboard from './Userdashboard.jsx'
 import axios from 'axios';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <Dashboard />
+    <App />
 )
 
