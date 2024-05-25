@@ -1,32 +1,19 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import './App.css'
+import React from 'react';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {Routes,Route} from 'react-router-dom'
+import './App.css';
+import Login from './login';
+import Dashboard from './Userdashboard';
 
 function App() {
-
   return (
-    <>
-    <div className='app-container'>
-      <div className="form-container">
-        <h2>Login</h2>
-        <form action='http://localhost:3001/api/user/login' method='POST' >
-          <div className="form-group">
-            <label>Email:</label>
-            <input type="email" name='email' required />
-          </div>
-          <div className="form-group">
-            <label>Password:</label>
-            <input type="password"  name='password' required />
-          </div>
-          <button type="submit" className="btn">Login</button>
-          <p>
-            Don't have an account? <Link to="/signup">Sign up</Link>
-          </p>
-        </form>
-      </div>
-      </div>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

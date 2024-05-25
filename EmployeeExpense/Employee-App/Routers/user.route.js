@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken")
 const express = require("express")
 const Router = express.Router() 
 
+
+
 async function hashPassword(plainPassword) {
     const saltRounds = 10;
     try {
