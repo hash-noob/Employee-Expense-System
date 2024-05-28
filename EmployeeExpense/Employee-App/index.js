@@ -17,12 +17,6 @@ app.use(cors({
     credentials: true
 }));
 
-// Enable CORS for preflight requests
-app.options('*', cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}));
-
 
   
 app.use("/api/user",userRouter)

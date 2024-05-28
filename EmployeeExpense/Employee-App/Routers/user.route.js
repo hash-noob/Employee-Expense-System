@@ -2,7 +2,6 @@ const userModel = require("../Models/user.model")
 const loginModel = require("../Models/login.model")
 const claimModel = require("../Models/claims.model")
 const billsModel = require("../Models/bills.model")
-const getBills = require("../Fetchers/BillFetcher").getBills
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const express = require("express")
@@ -84,7 +83,7 @@ function authenticateToken(req, res, next) {
 
 Router.get('/pending-bills/',authenticateToken, async (req, res) => {
 
-    const eid = req.user.eid;
+    const eid = req.user;
     try {
         const pendingBills = await billsModel.find({ claimedBy: eid, status: 'pending' });
         res.json(pendingBills);
@@ -95,7 +94,7 @@ Router.get('/pending-bills/',authenticateToken, async (req, res) => {
 });
 
 Router.get('/bills',authenticateToken,async(req,res)=>{
-    const eid = req.user.eid;
+    const eid = req.user;
     try {
         const bills = await billsModel.find({ claimedBy: eid});
         res.json(bills);
@@ -106,7 +105,7 @@ Router.get('/bills',authenticateToken,async(req,res)=>{
 })
 
 Router.get('/claims',authenticateToken,async(req,res)=>{
-    const eid = req.user.eid;
+    const eid = req.user
     try {
         const claims = await claimModel.find({"eid": eid});
         res.json(claims);
