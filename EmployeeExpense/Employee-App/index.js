@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const userRouter = require("./Routers/user.route")
 const managerRouter = require("./Routers/manager.route")
+const adminRouter=require("./Routers/admin.route")
 // eslint-disable-next-line no-unused-vars
 mongoose.connect("mongodb+srv://koushik110541:mongodb123@mydatabase.gzrfjum.mongodb.net/EmployeeExpenseDB?retryWrites=true&w=majority&appName=MyDatabase").then(()=> console.log("DB connected successfully."),(err)=>{console.log(err)})
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors({
   
 app.use("/api/user",userRouter)
 app.use("/api/manager",managerRouter)
+app.use("/api/admin",adminRouter)
 app.post("/",(req,res)=>{
     res.send('Connected to node.')
 })
