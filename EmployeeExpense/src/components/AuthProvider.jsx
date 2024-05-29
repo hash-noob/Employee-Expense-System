@@ -10,6 +10,18 @@ const AuthProvider = ({ children }) => {
     const [token,setToken] = useState(null);
     //const navigate = useNavigate()
  
+    const getRole= async(eid)=>{
+      try{
+        const response = await axios.get(`http://localhost:3001/api/admin/${eid}`);
+         return response.data[0].role;
+      } 
+      catch(err){
+        console.log(eid);
+        console.log(err);
+      }
+      return false;
+    }
+
     const loginAction = async (eid, password) => {
         
        
@@ -67,7 +79,7 @@ const AuthProvider = ({ children }) => {
       }, [token]);
       
     return (
-        <AuthContext.Provider value={{ eid,token,logout, loginAction,loading }}>
+        <AuthContext.Provider value={{ eid,token,logout,getRole, loginAction,loading }}>
             {children}
         </AuthContext.Provider>
     );

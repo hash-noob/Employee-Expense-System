@@ -16,8 +16,14 @@ const handleLogin = async (e) => {
   
   try {
       const success = await auth.loginAction(eid, password);
+      
       if (success) {
+         const role=await auth.getRole(eid);
+         console.log(role)
+        if(role==='user')
           navigate('/dashboard');
+        else if(role==='admin')
+          navigate('/adminDashboard');
       } else {
           // Display login failed message
           messageElement.textContent = 'Login failed. Please check your credentials.';

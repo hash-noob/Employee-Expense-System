@@ -1,4 +1,6 @@
 const express=require('express')
+//const userModel = require("../Models/user.model")
+const claimModel = require("../Models/claims.model")
 const Router=express.Router()
 const jwt = require("jsonwebtoken")
 const userModel=require('../Models/user.model')
@@ -18,11 +20,24 @@ Router.get('/',authenticateToken,async(req,res)=>{
     res.status(200).json(users)
 
 })
-Router.get('/:id',authenticateToken,async(req,res)=>{
+Router.get('/:id',async(req,res)=>{
     let eid=req.params.id
     const user=await userModel.find({eid:eid})
     res.status(200).json(user)
 })
+
+Router.get('/stats',async(req,res)=>{
+    try {
+        const userCount = await userModel.countDocuments({});
+        const managerCount = await userModel.countDocuments({ role: 'manager'});
+        //const claimCount = await Claim.countDocuments({ week: new Date().getWeekNumber() });
+        console.log(userCount);
+        res.json({ userCount, managerCount});
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+})
+
 Router.delete('/:id',authenticateToken,async(req,res)=>{
     let eid=req.params.id
     const {_id}=await userModel.findOne({"eid":eid})
