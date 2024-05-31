@@ -1,15 +1,17 @@
 const mongoose=require('mongoose')
 const expenseschema=mongoose.Schema({
-    expenseId:{
+    eId: String,
+    billId:{
         type : String,
         unique : true
     },
-    billNumber:Number,
+    billAmount:Number,
     billImage:Buffer,
-    billCost:Number,
+    category:String,
+    merchant:String, 
+    remark:String, 
     datedOn:Date,
-    remark:String,
-    claimedBy:String  //eid
+    paymentMethod:String
 })
 const billsmodel=mongoose.model("BillsCollection",expenseschema)
 module.exports=billsmodel

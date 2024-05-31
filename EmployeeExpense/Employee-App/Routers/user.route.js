@@ -1,5 +1,4 @@
 const userModel = require("../Models/user.model")
-const loginModel = require("../Models/login.model")
 const claimModel = require("../Models/claims.model")
 const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
@@ -23,7 +22,7 @@ async function hashPassword(plainPassword) {
 
 
 Router.post("/signup",async(req,res)=>{
-    const exists = await userModel.find({eid:req.body.eid})
+    const exists = await userModel.find({eId:req.body.eId})
     if(exists.length!==0){
         res.send("User already exists")
     }
@@ -32,17 +31,13 @@ Router.post("/signup",async(req,res)=>{
         console.log(req.body);
         req.body.password=await hashPassword(plainPassword);
         user=await userModel.create(req.body)
-        login = await loginModel.create({
-            eid:req.body.eid,
-            password:req.body.password
-        })
         res.json(user)
     }
 })
 
 Router.post("/login",async(req,res)=>{
 
-    const user = await loginModel.find({eid:req.body.eid})
+    const user = await userModel.find({eId:req.body.eId})
     if(user.length===0){
         res.status(404).send("User doesn't exist");
     }
@@ -76,16 +71,16 @@ function authenticateToken(req, res, next) {
   
     jwt.verify(token, "secretKey", (err, user) => {
       if (err) return res.sendStatus(403);
-      req.user = user.eid;
+      req.user = user.eId;
       next();
     });
   }
 
 Router.get('/pending-bills/',authenticateToken, async (req, res) => {
 
-    const eid = req.user;
+    const eId = req.user;
     try {
-        const pendingBills = await billsModel.find({ claimedBy: eid, status: 'pending' });
+        const pendingBills = await billsModel.find({ eId : eId, status: 'pending' });
         res.json(pendingBills);
     } catch (err) {
         console.error(err);
@@ -94,9 +89,9 @@ Router.get('/pending-bills/',authenticateToken, async (req, res) => {
 });
 
 Router.get('/bills',authenticateToken,async(req,res)=>{
-    const eid = req.user;
+    const eId = req.user;
     try {
-        const bills = await billsModel.find({ claimedBy: eid});
+        const bills = await billsModel.find({ eId : eId});
         res.json(bills);
     } catch (err) {
         console.error(err);
@@ -105,9 +100,9 @@ Router.get('/bills',authenticateToken,async(req,res)=>{
 })
 
 Router.get('/claims',authenticateToken,async(req,res)=>{
-    const eid = req.user
+    const eId = req.user
     try {
-        const claims = await claimModel.find({"eid": eid});
+        const claims = await claimModel.find({"eId": eId});
         res.json(claims);
     } catch (err) {
         console.error(err);
@@ -116,8 +111,8 @@ Router.get('/claims',authenticateToken,async(req,res)=>{
 })
 
 Router.put('/claims',async(req,res)=>{
-    const {claimId}=req.body;
-    const {_id} = await claimModel.findOne({"claimId":claimId})
+    const {cId}=req.body;
+    const {_id} = await claimModel.findOne({"cId":cId})
     const updatedClaim = await claimModel.findByIdAndUpdate(_id,req.body)
     if(updatedClaim){
         res.status(200).json(updatedClaim)
@@ -128,7 +123,6 @@ Router.put('/claims',async(req,res)=>{
 })
 
 Router.post('/bills/',async(req,res)=>{
-    //onst eid = req.user.eid;
     try {
         const bill = await billsModel.create(req.body);
         res.json(bill);
@@ -145,8 +139,8 @@ Router.post("/fileClaim",async (req,res)=>{
 
 
 Router.put('/claims/withdraw',async(req,res)=>{
-    const {claimId}=req.body;
-    const {_id} = await claimModel.findOne({"claimId":claimId})
+    const {cId}=req.body;
+    const {_id} = await claimModel.findOne({"cId":cId})
     const updatedClaim = await claimModel.findByIdAndUpdate(_id,{"status":"withdraw"})
     if(updatedClaim){
         res.status(200).json(updatedClaim)
