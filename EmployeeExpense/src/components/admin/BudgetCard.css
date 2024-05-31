@@ -1,0 +1,52 @@
+.budget-card {
+    position: relative;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    height: fit-content;
+  }
+  
+  .budget-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #777;
+  }
+  
+  .budget-amount h1 {
+    margin: 10px 0;
+    font-size: 2.5rem;
+    color: #333;
+  }
+  
+  .budget-footer p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #777;
+  }
+  
+  .decrease {
+    color: red;
+  }
+  
+  .budget-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #d8d8d8;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .calendar-icon {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  
