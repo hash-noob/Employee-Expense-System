@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {useAuth} from './AuthProvider'
 import './App.css';
-import axios from 'axios';
 
 function Login() {
  var auth = useAuth();
@@ -10,20 +9,21 @@ const navigate = useNavigate();
 const handleLogin = async (e) => {
   e.preventDefault();
   
-  const eid = document.getElementById("eid").value;
+  const eId = document.getElementById("eId").value;
   const password = document.getElementById("password").value;
   const messageElement = document.getElementById('message');
   
   try {
-      const success = await auth.loginAction(eid, password);
+      const success = await auth.loginAction(eId, password);
       
       if (success) {
-         const role=await auth.getRole(eid);
-         console.log(role)
+         const role=await auth.getRole(eId);
         if(role==='user')
           navigate('/dashboard');
-        else if(role==='admin')
+        else if(role==='admin'){
+          console.log(role)
           navigate('/adminDashboard');
+        }
       } else {
           // Display login failed message
           messageElement.textContent = 'Login failed. Please check your credentials.';
@@ -43,7 +43,7 @@ const handleLogin = async (e) => {
         <form method='post' onSubmit={handleLogin}>
           <div className="form-group">
             <label>Employee Id:</label>
-            <input id="eid" type="text" name='eid' required />
+            <input id="eId" type="text" name='eId' required />
           </div>
           <div className="form-group">
             <label>Password:</label>

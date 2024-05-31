@@ -5,47 +5,45 @@ const AuthContext = createContext();
 
 // AuthProvider component
 const AuthProvider = ({ children }) => {
-    const [eid, setEid] = useState(null);
+    const [eId, seteId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [token,setToken] = useState(null);
-    //const navigate = useNavigate()
  
-    const getRole= async(eid)=>{
+    const getRole= async(eId)=>{
       try{
-        const response = await axios.get(`http://localhost:3001/api/admin/${eid}`);
+        const response = await axios.get(`http://localhost:3001/api/admin/${eId}`);
          return response.data[0].role;
       } 
       catch(err){
-        console.log(eid);
+        console.log(eId);
         console.log(err);
       }
       return false;
     }
 
-    const loginAction = async (eid, password) => {
+    const loginAction = async (eId, password) => {
         
        
         // Implement actual login logic here
-        const loggedInUser = { eid }; // Replace this with the actual user data
+        const loggedInUser = { eId }; // Replace this with the actual user data
         
         try {
             const response = await axios.post('http://localhost:3001/api/user/login', { 
-              eid: eid,
+              eId: eId,
               password: password
             });
       
             if (response.status === 200) {
               // Store the token in local storage or any state management
               localStorage.setItem('token', response.data.token);
-              setEid(loggedInUser);
-              localStorage.setItem('eid',  JSON.stringify(loggedInUser));
+              seteId(loggedInUser);
+              localStorage.setItem('eId',  JSON.stringify(loggedInUser));
               setToken(response.data.token);
-              //messageElement.textContent = 'Login successful!';
-              //navigate('/dashboard');
+
               return true;
             }
           } catch (error) {
-            console.log(eid);
+            console.log(eId);
             console.error(error);
             //messageElement.textContent = 'Login failed. Please check your credentials.';
           }
@@ -53,17 +51,17 @@ const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        setEid(null);
+        seteId(null);
         setToken("");
         localStorage.removeItem('token');
-        localStorage.removeItem("eid");
+        localStorage.removeItem("eId");
     };
 
     useEffect(() => {
         // Check for a logged-in user on initial load
-        const storedUser = localStorage.getItem('eid');
+        const storedUser = localStorage.getItem('eId');
         if (storedUser) {
-            setEid(storedUser);
+            seteId(storedUser);
         }
         setLoading(false);
     }, []);
@@ -79,7 +77,7 @@ const AuthProvider = ({ children }) => {
       }, [token]);
       
     return (
-        <AuthContext.Provider value={{ eid,token,logout,getRole, loginAction,loading }}>
+        <AuthContext.Provider value={{ eId,token,logout,getRole, loginAction,loading }}>
             {children}
         </AuthContext.Provider>
     );

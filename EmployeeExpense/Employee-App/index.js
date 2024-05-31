@@ -14,10 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 
 
-// app.use(cors({
-//   origin: 'http://localhost:5173',
-//   credentials: true
-// }));
+
 
 app.use(cors({
     origin: 'http://localhost:5173',
@@ -27,7 +24,6 @@ app.use(cors({
 
   
 app.use("/api/user",userRouter)
-app.use("/api/manager",managerRouter)
 app.use("/api/admin",adminRouter)
 app.post("/",(req,res)=>{
     res.send('Connected to node.')

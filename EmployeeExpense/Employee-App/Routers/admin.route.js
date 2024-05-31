@@ -21,8 +21,8 @@ Router.get('/',authenticateToken,async(req,res)=>{
 
 })
 Router.get('/:id',async(req,res)=>{
-    let eid=req.params.id
-    const user=await userModel.find({eid:eid})
+    let eId=req.params.id
+    const user=await userModel.find({eId:eId})
     res.status(200).json(user)
 })
 
@@ -39,8 +39,8 @@ Router.get('/stats',async(req,res)=>{
 })
 
 Router.delete('/:id',authenticateToken,async(req,res)=>{
-    let eid=req.params.id
-    const {_id}=await userModel.findOne({"eid":eid})
+    let eId=req.params.id
+    const {_id}=await userModel.findOne({"eId":eId})
     const userdel=await userModel.findByIdAndDelete(_id)
     if(!userdel){
         res.status(500).json({ error: 'An error occurred while deleting users' });
@@ -50,8 +50,8 @@ Router.delete('/:id',authenticateToken,async(req,res)=>{
     }
 })
 Router.put('/:id',authenticateToken,async(req,res)=>{
-    let eid=req.params.id
-    const {_id}=await userModel.findOne({"eid":eid})
+    let eId=req.params.id
+    const {_id}=await userModel.findOne({"eId":eId})
     const userupdated=await userModel.findByIdAndUpdate(_id,req.body)
     if(userupdated){
         res.status(200).json(userupdated)
