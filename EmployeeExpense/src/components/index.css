@@ -96,3 +96,8 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.ownleft{
+  margin-right:0 ;
+  margin-left: 70%;
+}

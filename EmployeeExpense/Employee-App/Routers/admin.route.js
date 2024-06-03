@@ -1,10 +1,11 @@
 const express=require('express')
-const bcrypt = require("bcryptjs")
+const bcrypt= require("bcryptjs")
 //const userModel = require("../Models/user.model")
+const userModel = require("../Models/user.model")
 const claimModel = require("../Models/claims.model")
 const Router=express.Router()
 const jwt = require("jsonwebtoken")
-const userModel=require('../Models/user.model')
+
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -48,7 +49,6 @@ Router.post("/addUser",async(req,res)=>{
 Router.get('/',authenticateToken,async(req,res)=>{
     const users=await userModel.find({})
     res.status(200).json(users)
-
 })
 
 Router.get('/stats',async(req,res)=>{
