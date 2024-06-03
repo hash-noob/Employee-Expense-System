@@ -14,7 +14,17 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
-
+  Router.get('/stats',async(req,res)=>{
+    try {
+        const userCount = await userModel.countDocuments({});
+        const managerCount = await userModel.countDocuments({ role: 'manager'});
+        //const claimCount = await Claim.countDocuments({ week: new Date().getWeekNumber() });
+        //console.log(userCount);
+        res.json({ userCount, managerCount});
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+})
 Router.get('/',authenticateToken,async(req,res)=>{
     const users=await userModel.find({})
     res.status(200).json(users)
@@ -25,19 +35,6 @@ Router.get('/:id',async(req,res)=>{
     const user=await userModel.find({eId:eId})
     res.status(200).json(user)
 })
-
-Router.get('/stats',async(req,res)=>{
-    try {
-        const userCount = await userModel.countDocuments({});
-        const managerCount = await userModel.countDocuments({ role: 'manager'});
-        //const claimCount = await Claim.countDocuments({ week: new Date().getWeekNumber() });
-        console.log(userCount);
-        res.json({ userCount, managerCount});
-      } catch (err) {
-        res.status(500).json({ error: err.message });
-      }
-})
-
 Router.delete('/:id',authenticateToken,async(req,res)=>{
     let eId=req.params.id
     const {_id}=await userModel.findOne({"eId":eId})

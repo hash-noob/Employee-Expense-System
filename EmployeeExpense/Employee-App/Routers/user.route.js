@@ -121,6 +121,18 @@ Router.put('/claims',async(req,res)=>{
         res.status(404).send("error")
     }
 })
+Router.delete('/claims',async(req,res)=>{
+    const {cId}=req.body;
+    const {_id} = await claimModel.findOne({"cId":cId})
+    const deletedClaim = await claimModel.findByIdAndDelete(_id)
+    if(deletedClaim){
+        res.status(200).json({"message":"claim is deleted"})
+    }
+    else{
+        res.status(404).send("error")
+    }
+
+})
 
 Router.post('/bills/',async(req,res)=>{
     try {

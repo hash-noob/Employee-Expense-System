@@ -24,6 +24,9 @@ const handleLogin = async (e) => {
           console.log(role)
           navigate('/adminDashboard');
         }
+        else if(role==="manager"){
+          navigate('/managerDashboard')
+        }
       } else {
           // Display login failed message
           messageElement.textContent = 'Login failed. Please check your credentials.';

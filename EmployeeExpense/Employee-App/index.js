@@ -25,6 +25,7 @@ app.use(cors({
   
 app.use("/api/user",userRouter)
 app.use("/api/admin",adminRouter)
+app.use("/api/manager",managerRouter)
 app.post("/",(req,res)=>{
     res.send('Connected to node.')
 })
