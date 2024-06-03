@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const userRouter = require("./Routers/user.route")
 const adminRouter=require("./Routers/admin.route")
+const managerRouter=require("./Routers/manager.route")
 
 
 mongoose.connect("mongodb+srv://koushik110541:mongodb123@mydatabase.gzrfjum.mongodb.net/EmployeeExpenseDB?retryWrites=true&w=majority&appName=MyDatabase").then(()=> console.log("DB connected successfully."),(err)=>{console.log(err)})
