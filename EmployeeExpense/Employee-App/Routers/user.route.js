@@ -24,14 +24,14 @@ async function hashPassword(plainPassword) {
 Router.post("/signup",async(req,res)=>{
     const exists = await userModel.find({eId:req.body.eId})
     if(exists.length!==0){
-        res.send("User already exists")
+        res.status(404).send("User already exists")
     }
     else{
         const plainPassword = req.body.password
-        console.log(req.body);
+       
         req.body.password=await hashPassword(plainPassword);
         user=await userModel.create(req.body)
-        res.json(user)
+        res.status(200).json(user)
     }
 })
 
@@ -47,7 +47,7 @@ Router.post("/login",async(req,res)=>{
         //If password matches generate a token and send to client
         if(match){
             const token = jwt.sign(req.body, "secretKey");
-
+            console.log(req.body);
             // Send token to client
             res.status(200).send({ token });
             
@@ -134,10 +134,16 @@ Router.delete('/claims',async(req,res)=>{
 
 })
 
+Router.get('/managers',async (req,res)=>{
+    const managers = await userModel.find({ role: 'manager'});
+    res.send(managers)
+})
+
 Router.post('/bills/',async(req,res)=>{
+    console.log(req.body)
     try {
         const bill = await billsModel.create(req.body);
-        res.json(bill);
+        res.status(200).json(bill);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });

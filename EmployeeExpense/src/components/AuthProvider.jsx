@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
         
        
         // Implement actual login logic here
-        const loggedInUser = { eId }; // Replace this with the actual user data
+        const loggedInUser = eId ; // Replace this with the actual user data
         
         try {
             const response = await axios.post('http://localhost:3001/api/user/login', { 
@@ -36,8 +36,8 @@ const AuthProvider = ({ children }) => {
             if (response.status === 200) {
               // Store the token in local storage or any state management
               localStorage.setItem('token', response.data.token);
-              seteId(loggedInUser);
-              localStorage.setItem('eId',  JSON.stringify(loggedInUser));
+              seteId(loggedInUser.eId);
+              localStorage.setItem('eId',loggedInUser);
               setToken(response.data.token);
 
               return true;
