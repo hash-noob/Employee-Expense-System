@@ -122,10 +122,15 @@ Router.put('/claims',async(req,res)=>{
     }
 })
 
+Router.get('/managers',async (req,res)=>{
+    const managers = await userModel.find({ role: 'manager'});
+    res.send(managers)
+})
+
 Router.post('/bills/',async(req,res)=>{
     try {
         const bill = await billsModel.create(req.body);
-        res.json(bill);
+        res.status(200).json(bill);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
