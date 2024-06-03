@@ -17,7 +17,7 @@ const handleLogin = async (e) => {
       const success = await auth.loginAction(eId, password);
       
       if (success) {
-         const role=await auth.getRole(eId);
+         const role=await auth.getRole(eId); 
         if(role==='user')
           navigate('/dashboard');
         else if(role==='admin'){
