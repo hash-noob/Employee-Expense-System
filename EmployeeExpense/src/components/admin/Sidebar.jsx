@@ -31,6 +31,10 @@ const Sidebar = () => {
         <PeopleIcon className="menu-item-icon" />
         Add Users
       </div>
+      <div className="menu-item" onClick={() => navigate('/adminDashboard/viewUsers')}>
+        <PeopleIcon className="menu-item-icon" />
+        View Users
+      </div>
       {/* <div className="menu-item">
         <AccountBalanceIcon className="menu-item-icon" />
         Finance
