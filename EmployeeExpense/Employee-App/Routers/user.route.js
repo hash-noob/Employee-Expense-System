@@ -24,14 +24,14 @@ async function hashPassword(plainPassword) {
 Router.post("/signup",async(req,res)=>{
     const exists = await userModel.find({eId:req.body.eId})
     if(exists.length!==0){
-        res.send("User already exists")
+        res.status(404).send("User already exists")
     }
     else{
         const plainPassword = req.body.password
-        console.log(req.body);
+       
         req.body.password=await hashPassword(plainPassword);
         user=await userModel.create(req.body)
-        res.json(user)
+        res.status(200).json(user)
     }
 })
 
@@ -47,7 +47,7 @@ Router.post("/login",async(req,res)=>{
         //If password matches generate a token and send to client
         if(match){
             const token = jwt.sign(req.body, "secretKey");
-
+            console.log(req.body);
             // Send token to client
             res.status(200).send({ token });
             
@@ -110,7 +110,33 @@ Router.get('/claims',authenticateToken,async(req,res)=>{
     }
 })
 
+<<<<<<< HEAD
 
+=======
+Router.put('/claims',async(req,res)=>{
+    const {cId}=req.body;
+    const {_id} = await claimModel.findOne({"cId":cId})
+    const updatedClaim = await claimModel.findByIdAndUpdate(_id,req.body)
+    if(updatedClaim){
+        res.status(200).json(updatedClaim)
+    }
+    else{
+        res.status(404).send("error")
+    }
+})
+Router.delete('/claims',async(req,res)=>{
+    const {cId}=req.body;
+    const {_id} = await claimModel.findOne({"cId":cId})
+    const deletedClaim = await claimModel.findByIdAndDelete(_id)
+    if(deletedClaim){
+        res.status(200).json({"message":"claim is deleted"})
+    }
+    else{
+        res.status(404).send("error")
+    }
+
+})
+>>>>>>> 91a2ea83b166e5a1fc8b77aa60579eb36355cdd3
 
 Router.get('/managers',async (req,res)=>{
     const managers = await userModel.find({ role: 'manager'});
@@ -118,6 +144,7 @@ Router.get('/managers',async (req,res)=>{
 })
 
 Router.post('/bills/',async(req,res)=>{
+    console.log(req.body)
     try {
         const bill = await billsModel.create(req.body);
         res.status(200).json(bill);

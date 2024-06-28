@@ -4,7 +4,7 @@ const expenseschema=mongoose.Schema({
     billId:{
         type : String,
         unique : true
-    },
+    }, 
     billAmount:Number,
     billImage:Buffer,
     category:String,
