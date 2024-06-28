@@ -11,6 +11,8 @@ import ProtectedRoute from '../routes/ProtectedRoute'
 import { EmployeeProvider } from './admin/EmployeeContext';
 
 function App() {
+
+  
   return (
     <AuthProvider>
     <Router>

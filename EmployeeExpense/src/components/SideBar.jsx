@@ -1,6 +1,20 @@
 import React from "react";
+import LogOut from "../assets/LogOut.png"
+import {useAuth} from './AuthProvider'
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = () => (
+
+const Sidebar = () => {
+
+  var auth = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = ()=>{
+      navigate('/')
+      auth.logout()
+  }
+
+  return (
     <div className="bg-gray-900 text-white w-64 h-screen flex flex-col">
       <div className="flex items-center justify-center h-16">
         <div className="text-lg font-bold">Logo</div>
@@ -12,11 +26,13 @@ const Sidebar = () => (
         </a>
       </nav>
       <div className="px-2 py-2 mt-auto">
-        <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
-          <span className="mr-3">⚙️</span>
-          Settings
+        <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700" onClick={handleLogout}>
+          <span className="mr-3"><img src={LogOut} height={20} width={20}/></span>
+           Logout
         </a>
       </div>
     </div>
   );
-  export default Sidebar;
+}
+
+export default Sidebar;
