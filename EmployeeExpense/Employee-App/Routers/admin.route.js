@@ -6,6 +6,8 @@ const claimModel = require("../Models/claims.model")
 const Router=express.Router()
 const jwt = require("jsonwebtoken")
 
+let activities = [];
+
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -98,4 +100,17 @@ Router.put('/:id',authenticateToken,async(req,res)=>{
         res.status(404).send("error")
     }
 })
+
+Router.get('/activities', (req, res) => {
+    res.json(activities);
+  });
+  
+  // Add activity
+  Router.post('/activities', (req, res) => {
+    const activity = req.body;
+    activities.unshift(activity);
+    if (activities.length > 50) activities = activities.slice(0, 50);
+    res.status(201).json(activity);
+  });
+
 module.exports = Router

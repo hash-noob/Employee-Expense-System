@@ -24,8 +24,25 @@ export const EmployeeProvider = ({ children }) => {
     fetchEmployees();
   }, []);
 
-  const addActivity = (activity) => {
-    setActivities((prevActivities) => [activity, ...prevActivities]);
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/admin/activities');
+        setActivities(response.data);
+      } catch (error) {
+        console.error('Failed to fetch activities:', error);
+      }
+    };
+    fetchActivities();
+  }, []);
+
+  const addActivity = async (activity) => {
+    try {
+      const response = await axios.post('http://localhost:3001/api/admin/activities', activity);
+      setActivities((prevActivities) => [response.data, ...prevActivities]);
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+    }
   };
 
   const addEmployee = async (newEmployee) => {
@@ -40,7 +57,7 @@ export const EmployeeProvider = ({ children }) => {
 
   const updateEmployee = async (eId, updatedEmployee) => {
     try {
-      await axios.put(`http://localhost:3001/api/user/${eId}`, updatedEmployee);
+      await axios.put(`http://localhost:3001/api/admin/${eId}`, updatedEmployee);
       setEmployees((prevEmployees) =>
         prevEmployees.map((employee) =>
           employee.eId === eId ? { ...employee, ...updatedEmployee } : employee
@@ -54,13 +71,15 @@ export const EmployeeProvider = ({ children }) => {
 
   const deleteEmployee = async (eId) => {
     try {
-      await axios.delete(`http://localhost:3001/api/user/${eId}`);
+      await axios.delete(`http://localhost:3001/api/admin/${eId}`);
       setEmployees((prevEmployees) =>
         prevEmployees.filter((employee) => employee.eId !== eId)
       );
       addActivity({ type: 'deleted', employee: { eId } });
-    } catch (error) {
       console.error('Failed to delete employee:', error);
+    }
+    catch(e){
+      console.log(e);
     }
   };
 
