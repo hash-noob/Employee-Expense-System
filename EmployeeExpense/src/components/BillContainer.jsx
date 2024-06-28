@@ -2,19 +2,8 @@ import axios from 'axios';
 import React, { useEffect,useState } from 'react';
 import BillPopup from './Billpopup';
 import AddBill from './AddBillbtn';
+import BillCard from './BillCard';
 
-
-const BillCard = ({ bill }) => (
-  <div className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
-    <h3 className="text-lg font-semibold">{bill.title}</h3>
-    <p className="text-gray-600">{bill.description}</p>
-    <div className="mt-2">
-      <a href='#' className="text-blue-500 hover:underline">
-      {bill.link}
-      </a>
-    </div>
-  </div>
-);
 
 const BillGrid = ({bills,onSubmit}) => {
   
@@ -29,19 +18,17 @@ const BillGrid = ({bills,onSubmit}) => {
   }
  
   return (
-  <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-    <h2 className="text-xl font-semibold mb-4">Bills</h2>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {bills.map((bill, index) =>{
-        return (
-        <BillCard key={index} bill={bill} />
-      )}
-      )}
-    </div>  
-      <AddBill onClick={showBillPop}/>
-      { billPopup && <BillPopup onClose={closeBillPop} onSubmit={onSubmit} />}
-  </div>
-  )
+    <div className="bg-gray-100 p-4 rounded-lg shadow-md relative">
+      <h2 className="text-xl font-semibold mb-4">Bills</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {bills.map((bill, index) => (
+          <BillCard key={index} bill={bill} />
+        ))}
+      </div>
+      {billPopup && <BillPopup onClose={closeBillPop} onSubmit={onSubmit} />}
+      <AddBill onClick={showBillPop} />
+    </div>
+  );
 }
 
 
@@ -59,11 +46,15 @@ const BillContainer = () => {
       let temp=[]
       for(let i of response.data){
         temp.push({
-          title : i.billId,
-          description : i.category,
-          link : i.billAmount
+            billId: i.billId,
+            billAmount: i.billAmount,
+            category: i.category,
+            merchant: i.merchant, 
+            remark: i.remark, 
+            datedOn: i.datedOn,
+            paymentMethod: i.paymentMethod
         })
-      const billsArray = temp.map((e)=>e.title)
+      const billsArray = temp.map((e)=>e.billId)
       localStorage.setItem('billsArray',billsArray)
       setBills(temp);
     }
@@ -77,12 +68,21 @@ const BillContainer = () => {
     try{
       const res = await axios.post("http://localhost:3001/api/user/bills",formData)
       if(res.status==200){
-        setBills([...bills,{title:res.data.billId,description:res.data.category,link:res.data.billAmount}])
-        const billsArray = bills.map((e)=>e.title)
+        setBills([...bills,{
+          billId: res.data.billId,
+          billAmount: res.data.billAmount,
+          category: res.data.category,
+          merchant: res.data.merchant, 
+          remark: res.data.remark, 
+          datedOn: res.data.datedOn,
+          paymentMethod: res.data.paymentMethod
+        }])
+        const billsArray = bills.map((e)=>e.billId)
         localStorage.setItem('billsArray',billsArray)
       }
     }
     catch(err){
+      console.log(err)
       alert("Bill with given id already exist or BillAmount is not numeric")
     }
   }

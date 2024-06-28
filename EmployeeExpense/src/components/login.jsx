@@ -15,9 +15,9 @@ const handleLogin = async (e) => {
   
   try {
       const success = await auth.loginAction(eId, password);
-      
       if (success) {
          const role=await auth.getRole(eId);
+         console.log(role)
         if(role==='user')
           navigate('/dashboard');
         else if(role==='admin'){
@@ -27,9 +27,10 @@ const handleLogin = async (e) => {
       } else {
           // Display login failed message
           messageElement.textContent = 'Login failed. Please check your credentials.';
+          console.log(eId)
       }
   } catch (error) {
-      console.error(error);
+      console.log(error)
       // Display error message if login action throws an error
       messageElement.textContent = 'An error occurred while logging in.';
   }

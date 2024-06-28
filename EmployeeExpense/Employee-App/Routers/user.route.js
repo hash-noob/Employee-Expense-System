@@ -102,7 +102,7 @@ Router.get('/bills',authenticateToken,async(req,res)=>{
 Router.get('/claims',authenticateToken,async(req,res)=>{
     const eId = req.user
     try {
-        const claims = await claimModel.find({"eId": eId});
+        const claims = await claimModel.find({"eId": eId , status:"pending"});
         res.json(claims);
     } catch (err) {
         console.error(err);
@@ -110,17 +110,7 @@ Router.get('/claims',authenticateToken,async(req,res)=>{
     }
 })
 
-Router.put('/claims',async(req,res)=>{
-    const {cId}=req.body;
-    const {_id} = await claimModel.findOne({"cId":cId})
-    const updatedClaim = await claimModel.findByIdAndUpdate(_id,req.body)
-    if(updatedClaim){
-        res.status(200).json(updatedClaim)
-    }
-    else{
-        res.status(404).send("error")
-    }
-})
+
 
 Router.get('/managers',async (req,res)=>{
     const managers = await userModel.find({ role: 'manager'});

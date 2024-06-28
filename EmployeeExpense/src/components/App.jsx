@@ -9,6 +9,8 @@ import AuthProvider, {useAuth} from './AuthProvider'
 import ProtectedRoute from '../routes/ProtectedRoute'
 
 function App() {
+
+  
   return (
     <AuthProvider>
     <Router>
@@ -17,7 +19,6 @@ function App() {
         <Route element={<ProtectedRoute/>}>
           <Route path="/dashboard" element={<UserDashboard />} />
           <Route path="/adminDashboard" element={<AdminDashboard/>} />
-          
         </Route>
       </Routes>
     </Router>
