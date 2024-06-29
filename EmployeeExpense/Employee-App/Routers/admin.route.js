@@ -59,7 +59,7 @@ Router.get('/stats',async(req,res)=>{
         const userCount = await userModel.countDocuments({});
         console.log(`User count: ${userCount}`);
         const managerCount = await userModel.countDocuments({ role: 'manager'});
-        //const claimCount = await Claim.countDocuments({ week: new Date().getWeekNumber() });
+
         console.log(userCount);
         res.json({ userCount, managerCount});
       } catch (err) {

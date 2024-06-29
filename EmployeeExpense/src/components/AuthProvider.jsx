@@ -57,6 +57,8 @@ const AuthProvider = ({ children }) => {
         localStorage.removeItem("eId");
     };
 
+    
+
     useEffect(() => {
         // Check for a logged-in user on initial load
         const storedUser = localStorage.getItem('eId');

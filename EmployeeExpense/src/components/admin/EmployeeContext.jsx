@@ -15,7 +15,11 @@ export const EmployeeProvider = ({ children }) => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/admin');
+        const response = await axios.get('http://localhost:3001/api/admin',{
+          headers :{
+            Authorization:"Bearer "+localStorage.getItem('token')
+          }
+        });
         setEmployees(response.data);
       } catch (error) {
         console.error('Failed to fetch employees:', error);
@@ -71,7 +75,11 @@ export const EmployeeProvider = ({ children }) => {
 
   const deleteEmployee = async (eId) => {
     try {
-      await axios.delete(`http://localhost:3001/api/admin/${eId}`);
+      await axios.delete(`http://localhost:3001/api/admin/${eId}`,{
+        headers :{
+          Authorization:"Bearer "+localStorage.getItem('token')
+        }
+      });
       setEmployees((prevEmployees) =>
         prevEmployees.filter((employee) => employee.eId !== eId)
       );

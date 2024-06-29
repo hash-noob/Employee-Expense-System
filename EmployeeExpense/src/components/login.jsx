@@ -16,16 +16,10 @@ const handleLogin = async (e) => {
   try {
       const success = await auth.loginAction(eId, password);
       if (success) {
-<<<<<<< HEAD
          const role=await auth.getRole(eId);
-         console.log(role)
-=======
-         const role=await auth.getRole(eId); 
->>>>>>> 91a2ea83b166e5a1fc8b77aa60579eb36355cdd3
         if(role==='user')
           navigate('/dashboard');
         else if(role==='admin'){
-          console.log(role)
           navigate('/adminDashboard');
         }
         else if(role==="manager"){
