@@ -17,7 +17,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white w-64 h-screen flex flex-col">
+    <div className="bg-gray-900 text-white w-64 min-h-screen flex flex-col ">
       <div className="flex items-center justify-center h-16">
         <div className="text-lg font-bold">Logo</div>
       </div>
@@ -30,7 +30,7 @@ const Sidebar = () => {
           <SettingsIcon className="mr-3" />
           Settings
         </a>
-        <a href="history" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
+        <a onClick={()=>{ navigate('/dashboard/history') }}  className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
           <HistoryIcon className="mr-3" />
           History
         </a>

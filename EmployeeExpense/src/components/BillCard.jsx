@@ -1,11 +1,13 @@
-import React,{ useState } from "react";
+import React,{ useContext, useState } from "react";
+import axios from "axios";
 import {format} from 'date-fns'
+import billsContext from "./BillsContext";
 
 const BillCard = ({ bill }) => {
     
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-    const handleOpenPopup = (bill) => {
+    const handleOpenPopup = () => {
         setIsPopupOpen(true);
       };
     
@@ -33,7 +35,8 @@ const BillCard = ({ bill }) => {
 
 const BillDetailsPopupPane = ({ onClose, bill }) => {
     if (!bill) return null;
-  
+
+    let {bills,setBills} = useContext(billsContext)
     const {
         billId,
         billAmount,
@@ -43,10 +46,24 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
         datedOn,
         paymentMethod,
       } = bill;
+      const onRemove = async ()=>{
+        try {
+          const res =await axios.delete("http://localhost:3001/api/user/bill",{
+            params:{billId},
+            headers:{
+              Authorization:"Bearer "+localStorage.getItem('token')
+            }
+          })
+          setBills(bills.filter((ele)=>(ele.billId!==billId)))
+          onClose()
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-        <div className="bg-white rounded-lg p-6 w-full max-w-lg">
+        <div className="bg-white rounded-lg p-6 w-full max-w-lg h-lvh overflow-scroll">
           <h2 className="text-2xl font-bold mb-4">Bill Details</h2>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Bill ID:</label>
@@ -76,7 +93,13 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
             <label className="block text-gray-700 font-bold">Payment Method:</label>
             <p className="text-gray-700">{paymentMethod}</p>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end space-x-3">
+          <button 
+              onClick={onRemove} 
+              className="bg-red-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Remove
+            </button>
             <button 
               onClick={onClose} 
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"

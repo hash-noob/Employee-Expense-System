@@ -11,6 +11,7 @@ const expenseschema=mongoose.Schema({
     merchant:String, 
     remark:String, 
     datedOn:Date,
+    status:String,
     paymentMethod:String
 })
 const billsmodel=mongoose.model("BillsCollection",expenseschema)
