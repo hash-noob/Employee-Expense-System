@@ -16,15 +16,13 @@
     "@mui/material": "^5.15.19",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
-<<<<<<< HEAD
     "date-fns": "^3.6.0",
-=======
     "hoist-non-react-statics": "^3.3.2",
->>>>>>> 91a2ea83b166e5a1fc8b77aa60579eb36355cdd3
     "react": "^18.2.0",
     "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "xlsx": "^0.18.5"
   },
   "proxy": "http://localhost:3001",
   "devDependencies": {

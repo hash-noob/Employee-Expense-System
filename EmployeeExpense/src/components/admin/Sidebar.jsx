@@ -12,13 +12,22 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BuildIcon from '@mui/icons-material/Build';
 import { useNavigate } from 'react-router-dom';
+import {useAuth} from '../AuthProvider'
+import LogOut from "../../assets/LogOut.png"
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  var auth = useAuth()
+
+  const handleLogout = ()=>{
+      navigate('/')
+      auth.logout()
+  }
 
   return (
-    <div className="sidebar">
+    <div className="sidebar bg-gray-900 text-white w-64 h-screen flex flex-col">
       <div className="menu-title">PAGES</div>
+      <div>
       <div className="menu-item" onClick={() => navigate('/adminDashboard')}>
         <DashboardIcon className="menu-item-icon" />
         Dashboard
@@ -66,6 +75,13 @@ const Sidebar = () => {
       <div className="menu-item" >
         <SettingsIcon className="menu-item-icon" />
         Settings
+      </div>
+      </div>
+      <div className="px-2 py-2 mt-auto">
+        <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700" onClick={handleLogout}>
+          <span className="mr-3"><img src={LogOut} height={20} width={20}/></span>
+           Logout
+        </a>
       </div>
       {/* <div className="menu-item">
         <BuildIcon className="menu-item-icon" />
