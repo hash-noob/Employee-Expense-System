@@ -70,7 +70,7 @@ function AddUsers() {
     <div>
       <div className='card-container-dashboard'>
         <div className='card-heading-dashboard'>
-          <h1>Add New <span>User</span></h1>
+          <h1 style={{fontSize:'20px'}}>Add New <span>User</span></h1>
           <button
             style={{ width: 'max-content' }}
             className="btn"
@@ -97,8 +97,8 @@ function AddUsers() {
       </div>
       <div className='card-container-dashboard'>
         <div className='card-heading-dashboard'>
-          <h1>Add New <span>Manager</span></h1>
-          <button style={{ width: 'max-content' }} className="btn btn-w">Add Bulk Managers</button>
+          <h1 style={{fontSize:'20px'}}>Add New <span>Manager</span></h1>
+          
         </div>
         <form method='post' onSubmit={(e) => handleAddUser(e, 'manager')}>
           <div className="form-group">

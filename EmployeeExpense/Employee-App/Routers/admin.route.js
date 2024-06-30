@@ -55,11 +55,22 @@ Router.get('/stats', async (req, res) => {
         const managerCount = await userModel.countDocuments({ role: 'manager'});
 
         console.log(userCount);
-        res.json({ userCount, managerCount});
+        res.status(200).json({ userCount, managerCount});
       } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+
+Router.get('/claims',authenticateToken,async(req,res)=>{
+    try{
+        const claims = await claimModel.find({});
+        console.log(claims)
+        res.status(200).json(claims);
+    }
+    catch(err){
+        res.status(500).json({error:err.message});
+    }
+})
 
 Router.get('/:id', async (req, res) => {
     let eId = req.params.id;
@@ -90,7 +101,9 @@ Router.put('/:id', authenticateToken, async (req, res) => {
 });
 
 
-Router.post('/signup-bulk', async (req, res) => {
+
+
+Router.post('/signup-bulk',authenticateToken, async (req, res) => {
     const users = req.body;
   
     try {

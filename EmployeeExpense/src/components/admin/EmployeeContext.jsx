@@ -11,6 +11,7 @@ export const useEmployee = () => {
 export const EmployeeProvider = ({ children }) => {
   const [employees, setEmployees] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [claims,setClaims] = useState([]);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -41,6 +42,23 @@ export const EmployeeProvider = ({ children }) => {
   useEffect(() => {
     const localActivities = loadActivitiesFromLocalStorage();
     setActivities(localActivities);
+  }, []);
+
+  useEffect(() => {
+    const fetchClaims = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/admin/claims', {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('token')
+          }
+        });
+        setClaims(response.data);
+        console.log(claims)
+      } catch (error) {
+        console.error('Failed to fetch claims:', error);
+      }
+    };
+    fetchClaims();
   }, []);
 
   const addActivity = (activity) => {
@@ -120,7 +138,7 @@ export const EmployeeProvider = ({ children }) => {
   };
 
   return (
-    <EmployeeContext.Provider value={{ employees, addEmployee,addBulkEmployees, updateEmployee, deleteEmployee, activities }}>
+    <EmployeeContext.Provider value={{ employees,claims,setClaims, addEmployee,addBulkEmployees, updateEmployee, deleteEmployee, activities }}>
       {children}
     </EmployeeContext.Provider>
   );

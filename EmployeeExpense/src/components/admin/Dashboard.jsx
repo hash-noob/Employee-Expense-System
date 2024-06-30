@@ -35,7 +35,7 @@ const Dashboard = () => {
           <Route path="viewUsers" element={<UserList />} />
         </Routes>
       </div>
-      <div>
+      <div style={{width:'30vw'}}>
         <Routes>
           <Route path="/" element={<ClaimsBar />} />
           <Route path="addUsers" element={<ActivityBar />} />

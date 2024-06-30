@@ -40,6 +40,7 @@ body {
     background: #f4f6f8;
     min-height: 100vh;
     overflow: scroll;
+    max-width:60%;
   }
   
   .header {
@@ -116,7 +117,7 @@ body {
 
 .card-heading-dashboard{
   display:flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: baseline;
   margin-bottom: 10px;
 }
@@ -388,6 +389,7 @@ body {
   background-color: #f6f8fa;
   border-radius: 8px;
   padding: 16px;
+  width:25vw;
 }
 
 .activitybar h1 {
@@ -401,6 +403,7 @@ body {
   padding: 16px;
   margin-bottom: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width:100%;
 }
 
 .activity p {
@@ -481,4 +484,34 @@ body {
 
 .modal button:hover {
   background-color: #0056b3;
+}
+
+/* claimsBar.css */
+
+/* AdminDashboard.css */
+.admin-dashboard {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  /* Sidebar styles */
+}
+
+.main-content {
+  flex-grow: 1;
+}
+
+.header {
+  padding: 1rem;
+  background-color: #fff;
+  /* Header styles */
+}
+
+.content {
+  padding: 1rem;
+}
+
+.claims-section {
+  margin-top: 2rem;
 }
