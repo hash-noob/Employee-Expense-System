@@ -59,6 +59,7 @@ const BillContainer = () => {
       setBills(temp);
     }
   }
+  
   useEffect(() => {
     getBills();
   }, []);

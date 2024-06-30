@@ -19,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<ProtectedRoute/>}>
-          <Route path="/dashboard" element={<UserDashboard />} />
+          <Route path="/dashboard/*" element={<UserDashboard />} />
           <Route path="/adminDashboard/*" element={
               <EmployeeProvider>
                 <AdminDashboard />

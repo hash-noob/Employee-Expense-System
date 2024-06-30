@@ -47,7 +47,6 @@ Router.post("/login",async(req,res)=>{
         //If password matches generate a token and send to client
         if(match){
             const token = jwt.sign(req.body, "secretKey");
-            console.log(req.body);
             // Send token to client
             res.status(200).send({ token });
             
@@ -66,12 +65,13 @@ Router.post("/login",async(req,res)=>{
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-  
+    
     if (!token) return res.sendStatus(401);
-  
+   
     jwt.verify(token, "secretKey", (err, user) => {
       if (err) return res.sendStatus(403);
       req.user = user.eId;
+      req.password = user.password
       next();
     });
   }
@@ -157,9 +157,9 @@ Router.post("/fileClaim",async (req,res)=>{
 
 
 Router.put('/claims/withdraw',async(req,res)=>{
+    
     const {cId}=req.body;
-    const {_id} = await claimModel.findOne({"cId":cId})
-    const updatedClaim = await claimModel.findByIdAndUpdate(_id,{"status":"withdraw"})
+    const updatedClaim = await claimModel.findOneAndUpdate({"cId" : cId},{"status":"withdraw"})
     if(updatedClaim){
         res.status(200).json(updatedClaim)
     }
@@ -168,6 +168,44 @@ Router.put('/claims/withdraw',async(req,res)=>{
     }
 })
 
+Router.post('/ChangePassword',authenticateToken,async (req,res)=>{
+    const {currentPassword,newPassword} = req.body;
+    const eId = req.user
+    
+    try{
+        if(req.password!== currentPassword){
+            res.status(201).json({msg :'You have entered the wrong password'})
+        }else{
+            hashedpass = await hashPassword(newPassword);
+            const user = await userModel.findOneAndUpdate({"eId": eId},{"password": hashedpass });
+            if(user){
+                const token = jwt.sign({eId,"password": newPassword },"secretKey")
+                res.status(200).json({ msg :"Password changed Successfully",token})
+            }
+        }
+    }catch(err){
+        console.log(err)
+        res.status(500).json({msg:"Opps..Something went wrong"})
+    }
+})
+
+Router.post('/ChangeNumber',authenticateToken,async (req,res)=>{
+    const {password,newNumber} = req.body
+    const eId = req.user
+    const currpass = req.password
+
+    try{
+        if(password === currpass){
+            const user = await userModel.findOneAndUpdate({eId},{"mobileNumber":newNumber})
+            if(user)
+                res.status(200).send("Succesfully changed!!") 
+        }else{
+            res.status(201).send("Wrong password")
+        }
+    }catch(err){
+        console.log(err)
+    }
+})
 
 
 module.exports = Router 
