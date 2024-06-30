@@ -1,5 +1,7 @@
+import React, { useContext , useState } from 'react';
 import React, { useDebugValue, useState } from 'react';
 import DatePicker from 'react-datepicker';
+import billsContext from './BillsContext';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 
@@ -13,6 +15,9 @@ const Claimpopup = ({ onClose, onSubmit }) => {
   const [comments, setComments] = useState('');
   const [midOptions,setMidOptions] = useState([])
   const billsArray = localStorage.getItem('billsArray').split(',')
+  const billsProvider = useContext(billsContext)
+  const bills = billsProvider.bills
+
   let getManagers = async ()=>{
     const res = await axios.get("http://localhost:3001/api/user/managers")
     const managers = res.data.map((e)=> e.username )
@@ -33,13 +38,21 @@ const Claimpopup = ({ onClose, onSubmit }) => {
     
     const eId = localStorage.getItem('eId')
     const status = 'pending'
+    const billsArray = selectedBills
+    let totalAmount = selectedBills.reduce((tot,curr)=>{
+      console.log(curr)
+      tot+=bills.find((ele)=>(ele.billId==curr)).billAmount
+      return tot
+    },0)
+
     const formData = {
       eId,
       cId,
       status,
-      selectedBills,
+      billsArray,
       mid,
       title,
+      totalAmount,
       fromDate,
       toDate,
       comments

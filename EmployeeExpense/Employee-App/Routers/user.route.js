@@ -4,6 +4,7 @@ const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const express = require("express")
+const claimsmodel = require("../Models/claims.model")
 const Router = express.Router() 
 
 
