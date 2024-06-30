@@ -25,7 +25,7 @@ function App() {
                 <AdminDashboard />
               </EmployeeProvider>
             } />
-          <Route path="/managerDashboard" element={<ManagerDashboard/>}/>
+          <Route path="/managerDashboard/*" element={<ManagerDashboard/>}/>
           
         </Route>
       </Routes>
