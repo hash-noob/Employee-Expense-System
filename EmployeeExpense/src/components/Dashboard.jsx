@@ -25,10 +25,10 @@ import BillsContext from './BillsContext';
                       <div className="flex">
                           <BillsContext.Provider value={{bills,setBills}}>
                             <BillContainer/>
+                          </BillsContext.Provider>
                         <div className="w-1/3 ml-6">
                           <RequestList/>
                         </div>
-                        </BillsContext.Provider>
                       </div>
                     </main>
                   } 

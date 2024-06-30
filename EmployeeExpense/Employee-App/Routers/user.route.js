@@ -4,7 +4,6 @@ const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const express = require("express")
-const claimsmodel = require("../Models/claims.model")
 const Router = express.Router() 
 
 
@@ -78,7 +77,7 @@ function authenticateToken(req, res, next) {
   }
 
 Router.get('/pending-bills',authenticateToken, async (req, res) => {
-  
+
     const eId = req.user;
     try {
         const pendingBills = await billsModel.find({ eId : eId, status: 'pending' });

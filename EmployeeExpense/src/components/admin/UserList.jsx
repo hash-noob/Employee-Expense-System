@@ -34,7 +34,7 @@ const UserList = () => {
 
   const filteredEmployees = employees.filter(employee => {
     const matchesFilter = filter === 'All' || employee.role === filter;
-    const matchesSearch = employee.eId && employee.eId.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = employee.eId.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 

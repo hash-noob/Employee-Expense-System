@@ -3,13 +3,14 @@ const claimsschema=mongoose.Schema({
     eId : String,
     cId:String,
     status:String,
-    billsArray: [String],
+    billsArray:[
+        {billId:String}
+    ],
     datedOn : Date,
     endedOn : Date,
     title:String,
     mId: String, //Id of manager
     comments : String,
-    totalAmount:Number,
     fromDate:Date,
     toDate:Date
 })
