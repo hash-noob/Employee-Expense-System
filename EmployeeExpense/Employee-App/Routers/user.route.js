@@ -76,7 +76,7 @@ function authenticateToken(req, res, next) {
     });
   }
 
-Router.get('/pending-bills/',authenticateToken, async (req, res) => {
+Router.get('/pending-bills',authenticateToken, async (req, res) => {
 
     const eId = req.user;
     try {
@@ -87,6 +87,19 @@ Router.get('/pending-bills/',authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 });
+
+Router.delete('/bill',authenticateToken,async(req,res)=>{
+    const {billId}=req.query;
+    try{
+        const deletedClaim = await billsModel.deleteOne({billId})
+        if(deletedClaim){
+            res.status(200).json({"message":"claim is deleted"})
+        }
+    }catch(err){
+        console.log(err)
+        res.status(404).send("error")
+    }
+})
 
 Router.get('/bills',authenticateToken,async(req,res)=>{
     const eId = req.user;
@@ -103,6 +116,17 @@ Router.get('/claims',authenticateToken,async(req,res)=>{
     const eId = req.user
     try {
         const claims = await claimModel.find({"eId": eId , status:"pending"});
+        res.json(claims);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+    }
+})
+
+Router.get('/claimsHistory',authenticateToken,async(req,res)=>{
+    const eId = req.user
+    try {
+        const claims = await claimModel.find({"eId": eId });
         res.json(claims);
     } catch (err) {
         console.error(err);
@@ -139,7 +163,7 @@ Router.get('/managers',async (req,res)=>{
     res.send(managers)
 })
 
-Router.post('/bills/',async(req,res)=>{
+Router.post('/bills',async(req,res)=>{
     console.log(req.body)
     try {
         const bill = await billsModel.create(req.body);

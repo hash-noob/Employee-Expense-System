@@ -1,5 +1,6 @@
 import axios from 'axios';
-import React, { useEffect,useState } from 'react';
+import React, { useContext, useEffect,useState } from 'react';
+import billsContext from './BillsContext';
 import BillPopup from './Billpopup';
 import AddBill from './AddBillbtn';
 import BillCard from './BillCard';
@@ -35,10 +36,10 @@ const BillGrid = ({bills,onSubmit}) => {
 
 const BillContainer = () => {
 
-  const [bills, setBills] = useState([]);
+  const {bills, setBills} = useContext(billsContext)
   
   const getBills= async ()=>{
-     const response = await axios.get("http://localhost:3001/api/user/bills",{
+     const response = await axios.get("http://localhost:3001/api/user/pending-bills",{
                       headers:{
                         Authorization:"Bearer "+localStorage.getItem('token')
                       }
@@ -90,7 +91,7 @@ const BillContainer = () => {
 
   return (
     <div className="p-6">
-      <BillGrid bills={bills} onSubmit={onSubmit}/>
+      <BillGrid bills={bills} onSubmit={onSubmit} />
     </div>
   );
 };

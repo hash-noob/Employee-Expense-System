@@ -19,6 +19,7 @@ function BillPopup({ onClose, onSubmit }){
   const handleSubmit = (e) => {
     e.preventDefault();
     let eId = localStorage.getItem('eId')
+    let status ='pending'
     const formData = {
       eId,
       billId,
@@ -28,6 +29,7 @@ function BillPopup({ onClose, onSubmit }){
       merchant,
       remark,
       datedOn,
+      status,
       paymentMethod
     };
     onSubmit(formData);
