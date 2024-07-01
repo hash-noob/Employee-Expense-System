@@ -16,16 +16,19 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
-Router.get('/claims',authenticateToken,async (req,res)=>{
-    try{
-        const totalclaims=await claimModel.find();
-        res.json(totalclaims)
+  Router.get('/claims', authenticateToken, async (req, res) => {
+    try {
+        const claims = await claimModel.find({
+            mId: req.user.eId,
+            status: { $in: ['approved', 'rejected'] }
+        }).sort({ updatedAt: -1 });
+
+        res.json(claims);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'An error occurred while retrieving claims' });
     }
-    catch (err){
-        console.log(err)
-        res.status(500).json({error:'An error occured while retrieving expenses'})
-    }
-})
+});
 Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
 

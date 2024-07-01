@@ -117,6 +117,7 @@ import Settings from '../Setting/Settings';
 import ChangePassword from '../Setting/ChangePassword';
 import ChangeNumber from '../Setting/ChangeNumber';
 import ManageBills from './manageBills.jsx';
+import History from './History.jsx';
 import './manager.css';
 
 const Dashboard = () => {
@@ -138,6 +139,7 @@ const Dashboard = () => {
               />
             } 
           />
+          <Route path="/history" element={<History/>}/>
         </Routes>
       </div>
     </div>
