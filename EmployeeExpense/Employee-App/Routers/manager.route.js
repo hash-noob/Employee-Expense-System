@@ -116,4 +116,16 @@ Router.get('/rejected-bills/',authenticateToken,async (req, res) => {
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 });
+Router.get('/bills/:claimId', authenticateToken, async (req, res) => {
+    const { claimId } = req.params;
+  
+    try {
+      const bills = await billsModel.find({ cId: claimId });
+      res.json(bills);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while retrieving bills' });
+    }
+  });
+  
 module.exports=Router

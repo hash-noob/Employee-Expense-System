@@ -1,0 +1,47 @@
+.claim-detail-page {
+    width: 80%; /* Adjust this value as needed */
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .bills-section {
+    margin-top: 20px;
+  }
+  
+  .bill-card {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .bill-card img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+  .claim-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .claim-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .claim-actions button:nth-child(1) {
+    background-color: #4caf50; /* Green */
+    color: white;
+  }
+  
+  .claim-actions button:nth-child(2) {
+    background-color: #f44336; /* Red */
+    color: white;
+  }
+  

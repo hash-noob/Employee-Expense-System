@@ -5,7 +5,7 @@ import './App.css';
 import Login from './login';
 import UserDashboard from './Dashboard';
 import AdminDashboard from './admin/Dashboard'
-import ManagerDashboard from './manager/managerDashboard'
+import ManagerDashboard from './managercomponents/Dashboard'
 import AuthProvider, {useAuth} from './AuthProvider'
 import ProtectedRoute from '../routes/ProtectedRoute'
 import { EmployeeProvider } from './admin/EmployeeContext';
