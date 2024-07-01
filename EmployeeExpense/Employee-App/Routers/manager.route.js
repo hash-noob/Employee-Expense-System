@@ -16,6 +16,76 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
+Router.get('/claims',authenticateToken,async (req,res)=>{
+    try{
+        const totalclaims=await claimModel.find();
+        res.json(totalclaims)
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
+Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
+    const cId=req.params.id;
+
+    try{
+        const claimbyid=await claimModel.findOne({"cId":cId});
+        res.json(claimbyid)
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
+Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
+    const cId=req.params.id;
+    const { status } = req.body;
+    try{
+        const {_id} = await claimModel.findOne({"cId":cId})
+        const updatedClaim = await claimModel.findByIdAndUpdate(
+            _id,
+            { status: status }, // Update the status field
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedClaim) {
+            console.log('claim not found',cId);
+            return res.status(404).json({ error: 'Claim not found' });
+        }
+
+        res.json(updatedClaim);
+        // const {_id} = await claimModel.findOne({"cId":cId})
+        // const updatedClaim = await claimModel.findByIdAndUpdate(_id,{ status: status },{ new: true })
+        // if(updatedClaim){
+        //     res.status(200).json(updatedClaim)
+        // }
+        // else{
+        //     res.status(404).send("error")
+        // }
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
+Router.delete('/claimbyid/:id',authenticateToken,async (req,res)=>{
+    const cId=req.params.id;
+    try{
+        const {_id} = await claimModel.findOne({"cId":cId})
+        const updatedClaim = await claimModel.findByIdAndDelete(_id)
+        if(updatedClaim){
+            res.status(200).json({message:"claim deleted"})
+        }
+        else{
+            res.status(404).send("error")
+        }
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
 Router.get('/pending-bills/',authenticateToken,async (req, res) => {
     try {
         const pendingBills = await claimModel.find({"status":"pending"});
@@ -25,6 +95,7 @@ Router.get('/pending-bills/',authenticateToken,async (req, res) => {
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 });
+
 Router.get('/approved-bills/',authenticateToken, async (req, res) => {
 
     try {
