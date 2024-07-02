@@ -1,8 +1,7 @@
-import React, { useContext , useState } from 'react';
- 
+import React, { useContext, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import billsContext from './BillsContext';
 import 'react-datepicker/dist/react-datepicker.css';
+import billsContext from './BillsContext';
 import axios from 'axios';
 
 const Claimpopup = ({ onClose, onSubmit }) => {

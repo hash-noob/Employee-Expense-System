@@ -9,6 +9,7 @@ import AddUsers from './AddUsers';
 import ClaimsBar from "./ClaimsBar";
 import UserList from "./UserList";
 import ActivityBar from './ActivityBar';
+import AdminStats from './AdminStats';
 import { useEmployee } from './EmployeeContext';
 
 const Dashboard = () => {
@@ -33,15 +34,14 @@ const Dashboard = () => {
           } />
           <Route path="addUsers" element={<AddUsers />} />
           <Route path="viewUsers" element={<UserList />} />
+        
         </Routes>
       </div>
-      <div style={{width:'30vw'}}>
         <Routes>
           <Route path="/" element={<ClaimsBar />} />
           <Route path="addUsers" element={<ActivityBar />} />
           <Route path="viewUsers" element={<ActivityBar />} />
         </Routes>
-      </div>
     </div>
   );
 };

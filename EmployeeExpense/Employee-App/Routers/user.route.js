@@ -135,29 +135,7 @@ Router.get('/claimsHistory',authenticateToken,async(req,res)=>{
     }
 })
 
-Router.put('/claims',async(req,res)=>{
-    const {cId}=req.body;
-    const {_id} = await claimModel.findOne({"cId":cId})
-    const updatedClaim = await claimModel.findByIdAndUpdate(_id,req.body)
-    if(updatedClaim){
-        res.status(200).json(updatedClaim)
-    }
-    else{
-        res.status(404).send("error")
-    }
-})
-Router.delete('/claims',async(req,res)=>{
-    const {cId}=req.body;
-    const {_id} = await claimModel.findOne({"cId":cId})
-    const deletedClaim = await claimModel.findByIdAndDelete(_id)
-    if(deletedClaim){
-        res.status(200).json({"message":"claim is deleted"})
-    }
-    else{
-        res.status(404).send("error")
-    }
 
-})
 
 Router.get('/managers',async (req,res)=>{
     const managers = await userModel.find({ role: 'manager'});

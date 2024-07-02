@@ -9,6 +9,7 @@ import Dashboard from './manager/managerDashboard'
 import AuthProvider, {useAuth} from './AuthProvider'
 import ProtectedRoute from '../routes/ProtectedRoute'
 import { EmployeeProvider } from './admin/EmployeeContext';
+import AdminStats from './admin/AdminStats';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route element={<ProtectedRoute/>}>
           <Route path="/dashboard/*" element={<UserDashboard />} />
+          <Route path="/adminDashboard/statistics" element={<AdminStats />} />
           <Route path="/adminDashboard/*" element={
               <EmployeeProvider>
                 <AdminDashboard />

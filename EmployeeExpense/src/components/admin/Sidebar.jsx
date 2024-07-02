@@ -3,6 +3,7 @@ import './admin.css';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
+import BarChartIcon from '@mui/icons-material/BarChart'
 import { useNavigate } from 'react-router-dom';
 import {useAuth} from '../AuthProvider'
 import LogOut from "../../assets/LogOut.png"
@@ -35,6 +36,10 @@ const Sidebar = () => {
       <div className="menu-item" >
         <SettingsIcon className="menu-item-icon" />
         Settings
+      </div>
+      <div className="menu-item" onClick={() => navigate('/adminDashboard/statistics')}>
+        <BarChartIcon className="menu-item-icon" />
+        Statistics
       </div>
       </div>
       <div className="px-2 py-2 mt-auto">
