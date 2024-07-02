@@ -12,6 +12,6 @@ const claimsschema=mongoose.Schema({
     totalAmount:Number,
     fromDate:Date,
     toDate:Date
-})
+}, { timestamps: true })
 const claimsmodel=mongoose.model("claims",claimsschema)
 module.exports=claimsmodel
