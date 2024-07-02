@@ -72,7 +72,7 @@ const BillContainer = () => {
       if(res.status==200){
         setBills([...bills,{
           billId: res.data.billId,
-          billAmount: res.data.billAmount,
+          billAmount: Number(res.data.billAmount),
           category: res.data.category,
           merchant: res.data.merchant, 
           remark: res.data.remark, 

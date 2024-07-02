@@ -6,17 +6,17 @@ const ClaimsBar = () => {
 
   return (
     <div className="activitybar">
-      <h1>Claims List</h1>
+      <h1 className="activity-heading">Claims List</h1>
       {claims.length === 0 ? (
         <p>No claims to display</p>
       ) : (
         claims.map((claim) => (
           <div key={claim.cId} className='activity' >
-            <p><strong>Claim ID:</strong> {claim.cId}</p>
-            <p><strong>Employee ID:</strong> {claim.eId}</p>
-            <p><strong>Manager ID:</strong> {claim.mId}</p>
-            <p><strong>Total Amount:</strong> ${claim.totalAmount}</p>
-            <p><strong>Status:</strong> {claim.status}</p>
+            <p> <span style={{fontWeight:'600'}}>Claim ID:</span>  {claim.cId}</p>
+            <p> <span style={{fontWeight:'600'}}>Employee ID: </span> {claim.eId}</p>
+            <p> <span style={{fontWeight:'600'}}>Manager ID: </span> {claim.mId}</p>
+            <p><span style={{fontWeight:'600'}}> Total Amount: </span> ${claim.totalAmount}</p>
+            <p> <span style={{fontWeight:'600'}}>Status:  </span>{claim.status}</p>
           </div>
         ))
       )}

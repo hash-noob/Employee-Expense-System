@@ -142,16 +142,30 @@ Router.get('/managers',async (req,res)=>{
     res.send(managers)
 })
 
-Router.post('/bills',async(req,res)=>{
-    console.log(req.body)
+Router.post('/bills', async (req, res) => {
+    console.log(req.body);
+
     try {
-        const bill = await billsModel.create(req.body);
+        const billData = {
+            eId: req.body.eId,
+            billId: req.body.billId,
+            billAmount: req.body.billAmount,
+            billImage: req.body.billImage, // Base64 encoded string
+            category: req.body.category,
+            merchant: req.body.merchant,
+            remark: req.body.remark,
+            datedOn: req.body.datedOn,
+            status: req.body.status,
+            paymentMethod: req.body.paymentMethod
+        };
+
+        const bill = await billsModel.create(billData);
         res.status(200).json(bill);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+        res.status(500).json({ error: 'An error occurred while creating the bill' });
     }
-})
+});
 
 Router.post("/fileClaim",async (req,res)=>{
     result = await claimModel.create(req.body)

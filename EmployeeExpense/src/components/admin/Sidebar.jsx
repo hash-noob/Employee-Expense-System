@@ -32,10 +32,10 @@ const Sidebar = () => {
         <PeopleIcon className="menu-item-icon" />
         View Users
       </div>
-      <div className="menu-item" >
+      {/* <div className="menu-item" >
         <SettingsIcon className="menu-item-icon" />
         Settings
-      </div>
+      </div> */}
       </div>
       <div className="px-2 py-2 mt-auto">
         <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700" onClick={handleLogout}>

@@ -7,7 +7,7 @@ const ActivityBar = () => {
 
   return (
     <div className="activitybar">
-      <h1>Recent Activity</h1>
+      <h1 className="activity-heading">Recent Activity</h1>
       <div>
         {activities.map((activity, index) => (
           activity && activity.employee ? (

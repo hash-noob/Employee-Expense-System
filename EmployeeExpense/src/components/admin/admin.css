@@ -46,14 +46,15 @@ body {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: left;
     padding: 20px;
     background: #fff;
   }
   
   .header-title {
-    font-size: 24px;
-    font-weight: 500;
+    font-size: 30px;
+  
+    font-weight: 700;
   }
   
   .header-icons {
@@ -128,11 +129,20 @@ body {
   
 .activitybar {
   width: 23vw;
-  background-color: #007bff;
+  background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   height:100vh;
   overflow:scroll;
   padding: 10px;
   border-right: 1px solid #ddd;
+  margin:13px 0 13px 0;
+ 
+}
+
+.activity-heading{
+  font-size:25px;
+  font-weight: 700;
 }
 
 
@@ -258,20 +268,20 @@ body {
 .user-table-container {
  
   padding: 20px;
-  background-color: #F6F7FA;
+  background-color: #ffffff;
 }
 
 .user-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 10px;
-  background-color: #F6F7FA;
+  background-color: #fff;
   font-family: 'Arial, sans-serif';
 }
 
 .user-table thead th {
   padding: 15px;
-  background-color: #F6F7FA;
+  background-color: #ffffff;
   font-weight: bold;
   text-align: left;
   border-bottom: 2px solid #e0e0e0;
@@ -390,6 +400,7 @@ body {
   border-radius: 8px;
   padding: 16px;
   width:100%;
+  margin-right:10px;
 }
 
 .activitybar h1 {

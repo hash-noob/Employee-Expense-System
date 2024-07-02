@@ -4,21 +4,24 @@ import { Notifications, Search } from "@mui/icons-material";
 import './admin.css';
 
 const Header = () => {
+  const getCurrentGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return "Good morning, Admin!";
+    } else if (hour < 18) {
+      return "Good afternoon, Admin!";
+    } else {
+      return "Good evening, Admin!";
+    }
+  };
+
   return (
     <AppBar position="static" color="transparent" elevation={0} className="header">
       <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h6" className="header-title">
-          Good afternoon, Acme Inc.
-        </Typography>
-        <div className="header-icons">
-          <IconButton>
-            <Search />
-          </IconButton>
-          <IconButton>
-            <Notifications />
-          </IconButton>
-          <Avatar alt="Acme Inc." src="/static/images/avatar/1.jpg" />
-        </div>
+        <h1  className="header-title">
+          {getCurrentGreeting()}
+        </h1>
+        
       </Toolbar>
     </AppBar>
   ); 
