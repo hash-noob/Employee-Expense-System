@@ -34,7 +34,7 @@ const Sidebar = () => {
           <HistoryIcon className="mr-3" />
           History
         </a>
-        <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
+        <a onClick={()=>{navigate('/dashboard/statistics')}} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
           <BarChartIcon className="mr-3" />
           Statistics
         </a>

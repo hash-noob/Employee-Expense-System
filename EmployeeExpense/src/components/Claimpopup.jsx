@@ -1,8 +1,7 @@
-import React, { useContext , useState } from 'react';
-import React, { useDebugValue, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import billsContext from './BillsContext';
 import 'react-datepicker/dist/react-datepicker.css';
+import billsContext from './BillsContext';
 import axios from 'axios';
 
 const Claimpopup = ({ onClose, onSubmit }) => {
@@ -39,6 +38,7 @@ const Claimpopup = ({ onClose, onSubmit }) => {
     const eId = localStorage.getItem('eId')
     const status = 'pending'
     const billsArray = selectedBills
+    const mId = mid
     let totalAmount = selectedBills.reduce((tot,curr)=>{
       console.log(curr)
       tot+=bills.find((ele)=>(ele.billId==curr)).billAmount
@@ -50,7 +50,7 @@ const Claimpopup = ({ onClose, onSubmit }) => {
       cId,
       status,
       billsArray,
-      mid,
+      mId,
       title,
       totalAmount,
       fromDate,

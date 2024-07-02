@@ -9,6 +9,7 @@ import ChangePassword from './Setting/ChangePassword';
 import ChangeNumber from './Setting/ChangeNumber';
 import History from './History';
 import BillsContext from './BillsContext';
+import Stats from './Stats';
 
 
   const Dashboard = () => {
@@ -37,6 +38,7 @@ import BillsContext from './BillsContext';
             <Route path='/settings/ChangePassword' element = {<ChangePassword/>} />
             <Route path='/settings/ChangeNumber' element = {<ChangeNumber/>} />
             <Route path='/history' element={<History/>} />
+            <Route path='/statistics' element={<Stats/>} />
           </Routes>
         </div>
       </div>
