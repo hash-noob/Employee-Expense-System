@@ -526,3 +526,13 @@ body {
 .claims-section {
   margin-top: 2rem;
 }
+
+  
+.main-content1{
+  margin-left: 250px;
+  padding: 20px;
+  background: #f4f6f8;
+  min-height: 100vh;
+  overflow: scroll;
+  min-width:80%;
+}

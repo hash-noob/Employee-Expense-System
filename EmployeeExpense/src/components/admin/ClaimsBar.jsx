@@ -5,6 +5,7 @@ const ClaimsBar = () => {
   const { claims } = useEmployee();
 
   return (
+    <div style={{width:'30vw'}}>
     <div className="activitybar">
       <h1 className="activity-heading">Claims List</h1>
       {claims.length === 0 ? (
@@ -20,6 +21,7 @@ const ClaimsBar = () => {
           </div>
         ))
       )}
+    </div>
     </div>
   );
 };
