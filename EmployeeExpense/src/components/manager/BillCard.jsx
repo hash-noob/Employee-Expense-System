@@ -44,7 +44,7 @@ const BillCard = ({ bill }) => {
                 <h3 className="text-lg font-semibold">{bill.billId}</h3>
                 <p className="text-gray-600">{bill.category}</p>
                 <div className="mt-2">
-                    <a href='#' className="text-blue-500 hover:underline" onClick={handleOpenPopup}>
+                    <a  className="text-blue-500 hover:underline" onClick={handleOpenPopup}>
                     view details
                     </a>
                 </div>
@@ -59,7 +59,6 @@ const BillCard = ({ bill }) => {
 const BillDetailsPopupPane = ({ onClose, bill }) => {
     if (!bill) return null;
 
-    let {bills,setBills} = useContext(billsContext)
     const {
         billId,
         billAmount,
@@ -69,20 +68,6 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
         datedOn,
         paymentMethod,
       } = bill;
-      const onRemove = async ()=>{
-        try {
-          const res =await axios.delete("http://localhost:3001/api/user/bill",{
-            params:{billId},
-            headers:{
-              Authorization:"Bearer "+localStorage.getItem('token')
-            }
-          })
-          setBills(bills.filter((ele)=>(ele.billId!==billId)))
-          onClose()
-        } catch (error) {
-          console.log(error)
-        }
-      }
 
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
@@ -117,12 +102,6 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
             <p className="text-gray-700">{paymentMethod}</p>
           </div>
           <div className="flex justify-end space-x-3">
-          <button 
-              onClick={onRemove} 
-              className="bg-red-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Remove
-            </button>
             <button 
               onClick={onClose} 
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"

@@ -7,25 +7,21 @@ import Header from './Header'
 const MainContent = () => {
     const [activeTab, setActiveTab] = useState('pending');
     const [claims, setClaims] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const token = localStorage.getItem('token');
+    const [selectedClaim,setSelectedClaim] = useState()
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchClaims = async () => {
-            setLoading(true);
-            setError(null);
             try {
                 let endpoint = '';
                 if (activeTab === 'pending') {
-                    endpoint = 'http://localhost:3001/api/manager/pending-bills';
+                    endpoint = 'http://localhost:3001/api/manager/pending-claims';
                 } else if (activeTab === 'approved') {
                     endpoint = 'http://localhost:3001/api/manager/approved-bills';
                 } else if (activeTab === 'rejected') {
                     endpoint = 'http://localhost:3001/api/manager/rejected-bills';
                 }
-
                 const response = await axios.get(endpoint, {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -33,18 +29,18 @@ const MainContent = () => {
                 });
                 setClaims(response.data);
             } catch (error) {
-                setError('Error fetching claims');
-            } finally {
-                setLoading(false);
-            }
+               console.log(error)
+            } 
         };
 
         fetchClaims();
     }, [activeTab, token]);
 
-    const renderClaims = (claims) => {
+    const RenderClaims = ({claims}) => {
         return claims.map(claim => (
-            <div className="card" key={claim.cId} onClick={() => navigate(`/managerDashboard/claims/${claim.cId}`)}>
+            <div className="card" key={claim.cId} onClick={() =>{navigate(`/managerDashboard/claims/${claim.cId}`)
+                                                                setSelectedClaim(claim)
+                                                                localStorage.setItem('claim',JSON.stringify(claim))}}>
                 <p>Employee ID: {claim.eId}</p>
                 {/* <h3>Claim ID: {claim.cId}</h3> */}
                 <p>Title: {claim.title}</p>
@@ -61,14 +57,8 @@ const MainContent = () => {
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <div className="content">
                 <Routes>
-                    <Route path="/" element={
-                        <>
-                            {loading && <p>Loading...</p>}
-                            {error && <p>{error}</p>}
-                            {!loading && !error && renderClaims(claims)}
-                        </>
-                    } />
-                    <Route path="/claims/:cId" element={<ClaimDetails />} />
+                    <Route path="/" element={<RenderClaims claims={claims}/> }/>
+                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} />} />
                 </Routes>
             </div>
         </div>

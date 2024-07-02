@@ -22,41 +22,29 @@ const ClaimCard = ({ claim, onApprove, onReject }) => {
   );
 };
 
-const ClaimDetails = () => {
+const ClaimDetails = ({claim}) => {
   const { cId } = useParams();
-  const [claim, setClaim] = useState(null);
   const [bills, setBills] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const token = localStorage.getItem('token');
+  const {billsArray} = JSON.parse(localStorage.getItem('claim'));
 
   useEffect(() => {
     const fetchClaimDetails = async () => {
-      setLoading(true);
-      setError(null);
       try {
-        const claimResponse = await axios.get(`http://localhost:3001/api/manager/claimbyid/${cId}`, {
+        const res = await axios.post(`http://localhost:3001/api/manager/bills`,billsArray, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setClaim(claimResponse.data);
-
-        const billsResponse = await axios.get(`http://localhost:3001/api/manager/bills/${cId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setBills(billsResponse.data);
+        setBills(res.data);
       } catch (error) {
-        setError('Error fetching claim details');
-      } finally {
-        setLoading(false);
-      }
+        console.log(error);
+      } 
     };
-
+    claim =JSON.parse(localStorage.getItem('claim'))
     fetchClaimDetails();
-  }, [cId, token]);
+    
+  }, []);
 
   const handleApprove = async (claim) => {
     try {
@@ -68,9 +56,8 @@ const ClaimDetails = () => {
         }
       });
       setClaim(prevClaim => ({ ...prevClaim, status: 'approved' }));
-      alert('Claim has been approved');
     } catch (error) {
-      setError('Error approving claim');
+      console.log('Error approving claim');
     }
   };
 
@@ -84,15 +71,10 @@ const ClaimDetails = () => {
         }
       });
       setClaim(prevClaim => ({ ...prevClaim, status: 'rejected' }));
-      alert('Claim has been rejected');
     } catch (error) {
-      setError('Error rejecting claim');
+      console.log('Error rejecting claim');
     }
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-  if (!claim) return <p>No claim found</p>;
 
   return (
     <div className="claim-details grid grid-cols-1 lg:grid-cols-2 gap-4">

@@ -6,7 +6,10 @@ const expenseschema=mongoose.Schema({
         unique : true
     }, 
     billAmount:Number,
-    billImage:Buffer,
+    billImage:{
+        data:Buffer,
+        contentType: String
+    },
     category:String,
     merchant:String, 
     remark:String, 

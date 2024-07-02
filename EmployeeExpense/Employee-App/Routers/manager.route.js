@@ -16,19 +16,28 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
-  Router.get('/claims', authenticateToken, async (req, res) => {
+  Router.get('/pending-claims', authenticateToken, async (req, res) => {
     try {
         const claims = await claimModel.find({
-            mId: req.user.eId,
-            status: { $in: ['approved', 'rejected'] }
-        }).sort({ updatedAt: -1 });
-
+                                            mId: req.user.eId,
+                                            status:'pending' })
         res.json(claims);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'An error occurred while retrieving claims' });
     }
 });
+Router.post('/bills',authenticateToken,async (req,res)=>{
+    const bills = req.body;
+    try{
+        const billsArray = await billsModel.find({billId:{ $in: bills}})
+        res.json(billsArray)
+    }catch(err){
+        console.log(err)
+    }
+})
+
+
 Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
 
