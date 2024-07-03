@@ -16,10 +16,13 @@ const MainContent = () => {
             try {
                 let endpoint = '';
                 if (activeTab === 'pending') {
+                    navigate(`/managerDashboard/`)
                     endpoint = 'http://localhost:3001/api/manager/pending-claims';
                 } else if (activeTab === 'approved') {
+                    navigate(`/managerDashboard/`)
                     endpoint = 'http://localhost:3001/api/manager/approved-bills';
                 } else if (activeTab === 'rejected') {
+                    navigate(`/managerDashboard/`)
                     endpoint = 'http://localhost:3001/api/manager/rejected-bills';
                 }
                 const response = await axios.get(endpoint, {
@@ -51,14 +54,14 @@ const MainContent = () => {
             </div>
         ));
     };
-
+    console.log(activeTab);
     return (
         <div className="manager-main-content">
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <div className="content">
                 <Routes>
-                    <Route path="/" element={<RenderClaims claims={claims}/> }/>
-                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} />} />
+                    <Route path="/" element={<RenderClaims claims={claims} /> }/>
+                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
                 </Routes>
             </div>
         </div>

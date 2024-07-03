@@ -16,6 +16,19 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
+  Router.get('/claims', authenticateToken, async (req, res) => {
+    try {
+        const claims = await claimModel.find({
+            mId: req.user.eId,
+            status: { $in: ['approved', 'rejected'] }
+        }).sort({ updatedAt: -1 });
+
+        res.json(claims);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'An error occurred while retrieving claims' });
+    }
+})
   Router.get('/pending-claims', authenticateToken, async (req, res) => {
     try {
         const claims = await claimModel.find({
