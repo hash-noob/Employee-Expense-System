@@ -143,7 +143,6 @@ Router.get('/managers',async (req,res)=>{
 })
 
 Router.post('/bills',async(req,res)=>{
-    console.log(req.body)
     try {
         const bill = await billsModel.create(req.body);
         res.status(200).json(bill);

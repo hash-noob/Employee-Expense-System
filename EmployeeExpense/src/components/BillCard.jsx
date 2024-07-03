@@ -1,4 +1,4 @@
-import React,{ useContext, useState } from "react";
+import React,{ useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {format} from 'date-fns'
 import billsContext from "./BillsContext";
@@ -36,6 +36,8 @@ const BillCard = ({ bill }) => {
 const BillDetailsPopupPane = ({ onClose, bill }) => {
     if (!bill) return null;
 
+    const [image, setImage] = useState(null);
+
     let {bills,setBills} = useContext(billsContext)
     const {
         billId,
@@ -46,6 +48,7 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
         datedOn,
         paymentMethod,
       } = bill;
+
       const onRemove = async ()=>{
         try {
           const res =await axios.delete("http://localhost:3001/api/user/bill",{
@@ -80,6 +83,10 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Merchant:</label>
             <p className="text-gray-700">{merchant}</p>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold">Merchant:</label>
+             <img src={image} alt="bill_image" />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Remark:</label>
