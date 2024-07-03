@@ -55,6 +55,7 @@ const ClaimDetails = ({claim}) => {
 
   const handleApprove = async (claim) => {
     try {
+
       await axios.put(`http://localhost:3001/api/manager/claimbyid/${claim.cId}`, {
         status: 'approved'
       }, {
@@ -63,7 +64,10 @@ const ClaimDetails = ({claim}) => {
         }
       });
       setClaim(prevClaim => ({ ...prevClaim, status: 'approved' }));
+      alert("Claim Approved")
+      console.log("approved")
     } catch (error) {
+      alert("Claim Approved")
       console.log('Error approving claim');
     }
   };
@@ -78,13 +82,15 @@ const ClaimDetails = ({claim}) => {
         }
       });
       setClaim(prevClaim => ({ ...prevClaim, status: 'rejected' }));
+      alert("Claim rejected")
     } catch (error) {
+      alert("Claim Rejected")
       console.log('Error rejecting claim');
     }
   };
   const activeTab = claim.status === 'pending' ? 'pending' : (claim.status === 'approved' ? 'approved' : 'rejected');
   return (
-    <div className="claim-details min-h-screen grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="claim-details max-h-screen grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div className="bills-section">
         <BillContainer bills={bills} setBills={setBills} />
       </div>

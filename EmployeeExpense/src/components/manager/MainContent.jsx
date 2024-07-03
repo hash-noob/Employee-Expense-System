@@ -58,7 +58,7 @@ const MainContent = () => {
     return (
         <div className="manager-main-content">
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className="content">
+            <div className="content" style={{height:"100vh"}}>
                 <Routes>
                     <Route path="/" element={<RenderClaims claims={claims} /> }/>
                     <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
