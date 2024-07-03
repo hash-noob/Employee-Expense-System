@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import BillContainer from './BillContainer';
 
-const ClaimCard = ({ claim, onApprove, onReject }) => {
+const ClaimCard = ({ claim, onApprove, onReject ,activeTab}) => {
+  console.log("cliamcard")
+  console.log(activeTab)
   return (
-    <div className="claim-card h-screen bg-white p-8 rounded-lg shadow-md flex flex-col">
+    <div className="claim-card  bg-white p-8 rounded-lg shadow-md flex flex-col">
       <h2 className="text-2xl font-semibold mb-8">Claim Information</h2>
       {/* <p><strong>Claim ID:</strong> {claim.cId}</p> */}
       <p class="mb-3"><strong>Title:</strong> {claim.title}</p>
@@ -13,9 +15,14 @@ const ClaimCard = ({ claim, onApprove, onReject }) => {
       <p class="mb-3"><strong>Employee ID:</strong> {claim.eId}</p>
       <p class="mb-3"><strong>From Date:</strong> {new Date(claim.fromDate).toLocaleDateString()}</p>
       <p class="mb-3"><strong>To Date:</strong> {new Date(claim.toDate).toLocaleDateString()}</p>
+      
       <div className="flex justify-between mt-4">
-  <button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={() => onApprove(claim)}>Approve</button>
-  <button className="bg-blue-600 text-white py-2 px-4 rounded" onClick={() => onReject(claim)}>Reject</button>
+        {
+          activeTab==='pending'?<><button className="bg-blue-500 text-white py-2 px-4 rounded" onClick={() => onApprove(claim)}>Approve</button>
+  <button className="bg-blue-600 text-white py-2 px-4 rounded" onClick={() => onReject(claim)}>Reject</button></>:
+  <></>
+        }
+  
 </div>
 
     </div>
@@ -75,14 +82,14 @@ const ClaimDetails = ({claim}) => {
       console.log('Error rejecting claim');
     }
   };
-
+  const activeTab = claim.status === 'pending' ? 'pending' : (claim.status === 'approved' ? 'approved' : 'rejected');
   return (
     <div className="claim-details min-h-screen grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div className="bills-section">
         <BillContainer bills={bills} setBills={setBills} />
       </div>
-      <div className="claim-info-section min-h-screen">
-        <ClaimCard claim={claim} onApprove={handleApprove} onReject={handleReject} />
+      <div className="claim-info-section">
+        <ClaimCard claim={claim} onApprove={handleApprove} onReject={handleReject} activeTab={activeTab}/>
       </div>
     </div>
   );
