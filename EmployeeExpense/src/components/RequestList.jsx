@@ -26,8 +26,9 @@ const RequestList = () => {
       let temp=[]
       for(let ele of res.data){
         temp.push({
-          title : ele.cId,
-          description : ele.title,
+          title : ele.title,
+          description : ele.totalAmount,
+          status:ele.status
         })
       }
       setclaims(temp)
@@ -40,7 +41,7 @@ const RequestList = () => {
     const onSubmit = async (formData)=>{
       const res = await axios.post('http://localhost:3001/api/user/fileClaim',formData)
       if(res.status===200){
-        setclaims((prev)=> [...prev,{title :res.data.cId,description : res.data.title}])
+        setclaims((prev)=> [...prev,{title :res.data.title,description : res.data.totalAmount,status:res.data.status}])
       }
     }
 

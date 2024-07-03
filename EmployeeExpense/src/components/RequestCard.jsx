@@ -18,7 +18,8 @@ const  RequestCard = ({ request,claims,setClaims }) =>{
   return (
           <div className="p-4 bg-white rounded-lg shadow-md mb-4 ">
             <h3 className="text-lg font-semibold">{request.title}</h3>
-            <p className="text-gray-600">{request.description}</p>
+            <p className="text-gray-600">Rs.{request.description}</p>
+            {/* <p className="text-gray-600">{request.status}</p> */}
             <WithdrawButton claim = {request.title} withdrawClaim = {withdrawClaim}/>
           </div>
         )

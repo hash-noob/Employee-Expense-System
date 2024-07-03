@@ -36,7 +36,7 @@ const StatisticsPage = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">Statistics</h2>
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Details</h3>
-        <p>Average Monthly Expense: ${averageMonthlyExpense}</p>
+        <p>Average Monthly Expense:  Rs.{averageMonthlyExpense}</p>
         <p>Acceptance Percentage of Claims: {acceptancePercentage}%</p>
       </div>
       <div className="mb-8 p-4  bg-white rounded-lg shadow-md hover:shadow-xl">

@@ -3,11 +3,21 @@ const claimModel = require("../Models/claims.model")
 const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const multer = require('multer');
 const express = require("express")
 const claimsmodel = require("../Models/claims.model")
 const Router = express.Router() 
 
-
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+    },
+  });
+  
+  const upload = multer({ storage: storage });
 
 async function hashPassword(plainPassword) {
     const saltRounds = 10;
@@ -142,16 +152,30 @@ Router.get('/managers',async (req,res)=>{
     res.send(managers)
 })
 
-Router.post('/bills',async(req,res)=>{
-    console.log(req.body)
+Router.post('/bills', upload.single('billImage'), async (req, res) => {
     try {
-        const bill = await billsModel.create(req.body);
-        res.status(200).json(bill);
+      const { eId, billId, billAmount, category, merchant, remark, datedOn, status, paymentMethod } = req.body;
+      const billImage = req.file ? req.file.path : null;
+  
+      const newBill = new billsmodel({
+        eId,
+        billId,
+        billAmount,
+        billImage,
+        category,
+        merchant,
+        remark,
+        datedOn,
+        status,
+        paymentMethod,
+      });
+  
+      await newBill.save();
+      res.status(200).json(newBill);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'An error occurred while retrieving expenses' });
+      res.status(400).json({ message: err.message });
     }
-})
+  });
 
 Router.post("/fileClaim",async (req,res)=>{
     result = await claimModel.create(req.body)
