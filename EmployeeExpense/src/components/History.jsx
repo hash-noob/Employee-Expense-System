@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import BillItem from './BillItem';
 import ClaimItem from './ClaimItem';
-
 const History = () => {
     const [bills, setBills] = useState([]);
     const [claims, setClaims] = useState([]);
@@ -18,7 +17,6 @@ const History = () => {
       }
       setActiveSection(section);
   };
-
   useEffect(() => {
     const fetchBills = async () => {
       const response = await axios.get('http://localhost:3001/api/user/bills', {

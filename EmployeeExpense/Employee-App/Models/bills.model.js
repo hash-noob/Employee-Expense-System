@@ -21,19 +21,21 @@ const mongoose = require('mongoose');
 
 const expenseschema = mongoose.Schema({
     eId: String,
-    billId: {
-        type: String,
-        unique: true
+    billId:{
+        type : String,
+        unique : true
+    }, 
+    billAmount:Number,
+    billImage:{
+        data:Buffer,
+        contentType: String
     },
-    billAmount: Number,
-    billImage: String, // Change this to String
-    category: String,
-    merchant: String,
-    remark: String,
-    datedOn: Date,
-    status: String,
-    paymentMethod: String
-});
-
-const billsmodel = mongoose.model("BillsCollection", expenseschema);
-module.exports = billsmodel;
+    category:String,
+    merchant:String, 
+    remark:String, 
+    datedOn:Date,
+    status:String,
+    paymentMethod:String
+})
+const billsmodel=mongoose.model("BillsCollection",expenseschema)
+module.exports=billsmodel

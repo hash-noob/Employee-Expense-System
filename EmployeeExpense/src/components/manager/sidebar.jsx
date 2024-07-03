@@ -88,10 +88,10 @@ const Sidebar = () => {
           <HistoryIcon className="mr-3" />
           History
         </a>
-        <a onClick={() => navigate('/managerDashboard/managebills')} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
+        {/* <a onClick={() => navigate('/managerDashboard/managebills')} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
           <BarChartIcon className="mr-3" />
           Manage Claims
-        </a>
+        </a> */}
       </nav>
       <div className="px-2 py-2 mt-auto">
         <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700" onClick={handleLogout}>

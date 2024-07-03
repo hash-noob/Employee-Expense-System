@@ -16,19 +16,28 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
-  Router.get('/claims', authenticateToken, async (req, res) => {
+  Router.get('/pending-claims', authenticateToken, async (req, res) => {
     try {
         const claims = await claimModel.find({
-            mId: req.user.eId,
-            status: { $in: ['approved', 'rejected'] }
-        }).sort({ updatedAt: -1 });
-
+                                            mId: req.user.eId,
+                                            status:'pending' })
         res.json(claims);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'An error occurred while retrieving claims' });
     }
 });
+Router.post('/bills',authenticateToken,async (req,res)=>{
+    const bills = req.body;
+    try{
+        const billsArray = await billsModel.find({billId:{ $in: bills}})
+        res.json(billsArray)
+    }catch(err){
+        console.log(err)
+    }
+})
+
+
 Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
 
@@ -119,4 +128,68 @@ Router.get('/rejected-bills/',authenticateToken,async (req, res) => {
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 });
+Router.get('/bills/:claimId', authenticateToken, async (req, res) => {
+    const { claimId } = req.params;
+  
+    try {
+      const bills = await billsModel.find({ cId: claimId });
+      res.json(bills);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while retrieving bills' });
+    }
+  });
+  Router.post('/claims', authenticateToken, async (req, res) => {
+    try {
+        const newClaim = new claimModel(req.body);
+        await newClaim.save();
+        res.status(201).json(newClaim);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to create new claim' });
+    }
+});
+Router.put('/claims/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const updatedClaim = await claimModel.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedClaim) {
+            return res.status(404).json({ error: 'Claim not found' });
+        }
+        res.json(updatedClaim);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update claim' });
+    }
+});
+Router.get('/:billid', authenticateToken, async (req, res) => {
+    const { billid } = req.params;
+    try {
+      const bills = await billsModel.find({ billId: billid });
+  
+      if (bills.length === 0) {
+        return res.status(404).json({ error: 'No bills found with the provided ID' });
+      }
+  
+      res.json(bills);
+    } catch (err) {
+      console.error('Error retrieving bills:', err);
+      res.status(500).json({ error: 'An error occurred while retrieving bills' });
+    }
+  });
+Router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        // Assuming user data is stored in userModel
+        const manager = await userModel.findById(req.user.eId);
+        if (!manager) {
+            return res.status(404).json({ error: 'Manager not found' });
+        }
+        res.json(manager);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch manager profile' });
+    }
+});
+
+  
 module.exports=Router

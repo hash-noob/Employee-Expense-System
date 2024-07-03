@@ -5,7 +5,7 @@ import './App.css';
 import Login from './login';
 import UserDashboard from './Dashboard';
 import AdminDashboard from './admin/Dashboard'
-import ManagerDashboard from './manager/managerDashboard'
+import Dashboard from './manager/managerDashboard'
 import AuthProvider, {useAuth} from './AuthProvider'
 import ProtectedRoute from '../routes/ProtectedRoute'
 import { EmployeeProvider } from './admin/EmployeeContext';
@@ -27,7 +27,7 @@ function App() {
                 <AdminDashboard />
               </EmployeeProvider>
             } />
-          <Route path="/managerDashboard/*" element={<ManagerDashboard/>}/>
+          <Route path="/managerDashboard/*" element={<Dashboard/>}/>
           
         </Route>
       </Routes>

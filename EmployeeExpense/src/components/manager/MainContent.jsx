@@ -1,60 +1,65 @@
- import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './manager.css'; // Assuming you have some basic CSS for styling
-
-const billsData = {
-    pending: [
-        { id: 'pencil', amount: 4000, date: '01/01/1970', merchant: 'fghi' },
-        { id: 'erasor', amount: 6000, date: '01/01/1970', merchant: 'fghi' },
-        { id: 'sharpener', amount: 2000, date: '01/01/1970', merchant: 'fghi' }
-    ],
-    accepted: [
-        { id: 'notebook', amount: 5000, date: '02/01/1970', merchant: 'jklm' }
-    ],
-    rejected: [
-        { id: 'pen', amount: 1000, date: '03/01/1970', merchant: 'nopq' }
-    ]
-};
-
+import { Routes, Route,useNavigate } from 'react-router-dom';
+import ClaimDetails from './ClaimDetails';
+import Header from './Header'
 const MainContent = () => {
     const [activeTab, setActiveTab] = useState('pending');
+    const [claims, setClaims] = useState([]);
+    const token = localStorage.getItem('token');
+    const [selectedClaim,setSelectedClaim] = useState()
+    const navigate = useNavigate();
 
-    const renderBills = (bills) => {
-        return bills.map(bill => (
-            <div className="card" key={bill.id}>
-                <h3>Bill ID: {bill.id}</h3>
-                <p>Amount: ${bill.amount}</p>
-                <p>Date: {bill.date}</p>
-                <p>Merchant: {bill.merchant}</p>
+    useEffect(() => {
+        const fetchClaims = async () => {
+            try {
+                let endpoint = '';
+                if (activeTab === 'pending') {
+                    endpoint = 'http://localhost:3001/api/manager/pending-claims';
+                } else if (activeTab === 'approved') {
+                    endpoint = 'http://localhost:3001/api/manager/approved-bills';
+                } else if (activeTab === 'rejected') {
+                    endpoint = 'http://localhost:3001/api/manager/rejected-bills';
+                }
+                const response = await axios.get(endpoint, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setClaims(response.data);
+            } catch (error) {
+               console.log(error)
+            } 
+        };
+
+        fetchClaims();
+    }, [activeTab, token]);
+
+    const RenderClaims = ({claims}) => {
+        return claims.map(claim => (
+            <div className="card" key={claim.cId} onClick={() =>{navigate(`/managerDashboard/claims/${claim.cId}`)
+                                                                setSelectedClaim(claim)
+                                                                localStorage.setItem('claim',JSON.stringify(claim))}}>
+                <p>Employee ID: {claim.eId}</p>
+                {/* <h3>Claim ID: {claim.cId}</h3> */}
+                <p>Title: {claim.title}</p>
+                <p>Total Amount: ${claim.totalAmount}</p>
+                
+                <p>From Date: {new Date(claim.fromDate).toLocaleDateString()}</p>
+                <p>To Date: {new Date(claim.toDate).toLocaleDateString()}</p>
             </div>
         ));
     };
 
     return (
         <div className="manager-main-content">
-            <div className="header">
-                <div 
-                    className={`tab ${activeTab === 'pending' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('pending')}
-                >
-                    Pending Bills
-                </div>
-                <div 
-                    className={`tab ${activeTab === 'accepted' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('accepted')}
-                >
-                    Accepted Bills
-                </div>
-                <div 
-                    className={`tab ${activeTab === 'rejected' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('rejected')}
-                >
-                    Rejected Bills
-                </div>
-            </div>
+            <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <div className="content">
-                {activeTab === 'pending' && renderBills(billsData.pending)}
-                {activeTab === 'accepted' && renderBills(billsData.accepted)}
-                {activeTab === 'rejected' && renderBills(billsData.rejected)}
+                <Routes>
+                    <Route path="/" element={<RenderClaims claims={claims}/> }/>
+                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} />} />
+                </Routes>
             </div>
         </div>
     );
