@@ -33,7 +33,25 @@ const Sidebar = () => {
         <PeopleIcon className="menu-item-icon" />
         View Users
       </div>
-    </div>
+      <div className="menu-item" >
+        <SettingsIcon className="menu-item-icon" />
+        Settings
+      </div>
+      {/* <div className="menu-item" onClick={() => navigate('/adminDashboard/statistics')}>
+        <BarChartIcon className="menu-item-icon" />
+        Statistics
+      </div> */}
+      </div>
+      <div className="px-2 py-2 mt-auto">
+        <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700" onClick={handleLogout}>
+          <span className="mr-3"><img src={LogOut} height={20} width={20}/></span>
+           Logout
+        </a>
+      </div>
+      {/* <div className="menu-item">
+        <BuildIcon className="menu-item-icon" />
+        Utility
+      </div> */}
     </div>
   );
 };

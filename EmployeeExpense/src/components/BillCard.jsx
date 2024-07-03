@@ -36,17 +36,17 @@ const BillCard = ({ bill }) => {
 const BillDetailsPopupPane = ({ onClose, bill }) => {
     if (!bill) return null;
 
-    let {bills,setBills} = useContext(billsContext)
-    const {
-        billId,
-        billAmount,
-        billImage,
-        category,
-        merchant,
-        remark,
-        datedOn,
-        paymentMethod,
-      } = bill;
+    const { bills, setBills } = useContext(billsContext);
+  const {
+    billId,
+    billAmount,
+    billImage,
+    category,
+    merchant,
+    remark,
+    datedOn,
+    paymentMethod,
+  } = bill;
       const onRemove = async ()=>{
         try {
           const res =await axios.delete("http://localhost:3001/api/user/bill",{
@@ -97,11 +97,7 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
           <div className="mb-4">
           <label className="block text-gray-700 font-bold">Bill Image:</label>
           {billImage ? (
-            <img
-              src={URL.createObjectURL(new Blob([billImage], { type: billImage.type }))}
-              alt="Bill"
-              className="w-full h-auto"
-            />
+            <img src={`http://localhost:3001/${billImage}`} alt="Bill" className="w-full h-auto" />
           ) : (
             <p className="text-gray-700">No image available</p>
           )}

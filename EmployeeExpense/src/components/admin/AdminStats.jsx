@@ -74,8 +74,9 @@ const AdminStats = () => {
   const acceptancePercentage = ((5 / 7) * 100).toFixed(2); // Example calculation
 
   return (
-    <div className='flex'>
-      <Sidebar/>
+    // <div className='flex'>
+    <div style={{marginTop:"40px"}}>
+      {/* <Sidebar/>
     <div className='main-content1'>
     <div className=" m-5  p-6 bg-white rounded-lg shadow-md hover:shadow-lg bg-gra-01 ">
       <h2 className="text-2xl font-bold mb-4 text-center">Statistics</h2>
@@ -102,7 +103,7 @@ const AdminStats = () => {
              </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className='mb-8 p-4  bg-white rounded-lg shadow-md hover:shadow-xl'> 
       <h3 className="text-xl font-semibold mb-4">Bills vs Claims</h3>
         <ResponsiveContainer width="100%" height={300}>
@@ -149,8 +150,8 @@ const AdminStats = () => {
         </ResponsiveContainer>
       </div>
     </div>
-    </div>
-    </div>
+    // </div>
+    // </div>
   );
 };
 

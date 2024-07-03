@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 function BillPopup({ onClose, onSubmit }){
   const [billId, setBillId] = useState('');
   const [billAmount, setBillAmount] = useState('');
-  const [billImage, setBillImage] = useState(null);
+  const [billImage, setBillImage] = useState();
   const [category, setCategory] = useState('');
   const [merchant, setMerchant] = useState('');
   const [remark, setRemark] = useState('');
@@ -18,23 +18,26 @@ function BillPopup({ onClose, onSubmit }){
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let eId = localStorage.getItem('eId')
-    let status ='pending'
-    const formData = {
-      eId,
-      billId,
-      billAmount,
-      billImage,
-      category,
-      merchant,
-      remark,
-      datedOn,
-      status,
-      paymentMethod
-    };
+    let eId = localStorage.getItem('eId');
+    let status = 'pending';
+    const formData = new FormData();
+    formData.append('eId', eId);
+    formData.append('billId', billId);
+    formData.append('billAmount', billAmount);
+    if (billImage) {
+      formData.append('billImage', billImage);
+    }
+    formData.append('category', category);
+    formData.append('merchant', merchant);
+    formData.append('remark', remark);
+    formData.append('datedOn', datedOn);
+    formData.append('status', status);
+    formData.append('paymentMethod', paymentMethod);
+  
     onSubmit(formData);
-    onClose()
+    onClose();
   };
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-10">
@@ -61,16 +64,16 @@ function BillPopup({ onClose, onSubmit }){
               required 
             />
           </div>
+          
           <div className="mb-4">
             <label className="block text-gray-700">Upload Bill</label>
             <input 
               type="file" 
-              value={billImage}
-              accept=".pdf, .jpg" 
+              accept=".pdf, .jpg, .jpeg, .png" 
               onChange={handleFileChange} 
-              className="w-full px-3 py-2 border rounded"
-               
+              className="w-full px-3 py-2 border rounded" 
             />
+          
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Category</label>

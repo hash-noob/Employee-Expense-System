@@ -13,10 +13,10 @@ const ClaimsBar = () => {
       ) : (
         claims.map((claim) => (
           <div key={claim.cId} className='activity' >
-            <p> <span style={{fontWeight:'600'}}>Claim ID:</span>  {claim.cId}</p>
+            <p> <span style={{fontWeight:'600'}}>Claim Title:</span>  {claim.title}</p>
             <p> <span style={{fontWeight:'600'}}>Employee ID: </span> {claim.eId}</p>
             <p> <span style={{fontWeight:'600'}}>Manager ID: </span> {claim.mId}</p>
-            <p><span style={{fontWeight:'600'}}> Total Amount: </span> ${claim.totalAmount}</p>
+            <p><span style={{fontWeight:'600'}}> Total Amount: </span> Rs.{claim.totalAmount}</p>
             <p> <span style={{fontWeight:'600'}}>Status:  </span>{claim.status}</p>
           </div>
         ))
