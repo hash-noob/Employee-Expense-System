@@ -21,7 +21,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route element={<ProtectedRoute/>}>
           <Route path="/dashboard/*" element={<UserDashboard />} />
-          <Route path="/adminDashboard/statistics" element={<AdminStats />} />
+          {/* <Route path="/adminDashboard/statistics" element={<AdminStats />} /> */}
           <Route path="/adminDashboard/*" element={
               <EmployeeProvider>
                 <AdminDashboard />

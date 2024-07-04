@@ -63,6 +63,45 @@ Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
         res.status(500).json({error:'An error occured while retrieving expenses'})
     }
 })
+Router.get('/bills/:billid',authenticateToken,async (req,res)=>{
+    const billId=req.params.billid;
+    // const {status}=req.body;
+    try{
+        const Bill = await billsModel.findOne({"billId":billId})
+        if (!Bill) {
+            console.log('bill not found',billId);
+            return res.status(404).json({ error: 'Bill not found' });
+        }
+        //console.log("bill found")
+        res.json(Bill);
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
+Router.put('/bills/:billid',authenticateToken,async (req,res)=>{
+    const billId=req.params.billid;
+    const {status}=req.body;
+    try{
+        const {_id} = await billsModel.findOne({"billId":billId})
+        const updatedBill = await billsModel.findByIdAndUpdate(
+            _id,
+            { status: status },
+            { new: true } 
+        );
+       
+        if (!updatedBill) {
+            console.log('bill not found',billId);
+            return res.status(404).json({ error: 'Bill not found' });
+        }
+        res.json(updatedBill);
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
 Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
     const { status } = req.body;
@@ -70,24 +109,19 @@ Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
         const {_id} = await claimModel.findOne({"cId":cId})
         const updatedClaim = await claimModel.findByIdAndUpdate(
             _id,
-            { status: status }, // Update the status field
-            { new: true } // Return the updated document
+            { status: status },
+            { new: true } 
         );
-
+        // const billsArray = updatedClaim.data[0].billsArray;
+        // console.log("--------")
+        // console.log(billsArray)
+       
         if (!updatedClaim) {
             console.log('claim not found',cId);
             return res.status(404).json({ error: 'Claim not found' });
         }
 
         res.json(updatedClaim);
-        // const {_id} = await claimModel.findOne({"cId":cId})
-        // const updatedClaim = await claimModel.findByIdAndUpdate(_id,{ status: status },{ new: true })
-        // if(updatedClaim){
-        //     res.status(200).json(updatedClaim)
-        // }
-        // else{
-        //     res.status(404).send("error")
-        // }
     }
     catch (err){
         console.log(err)
@@ -113,7 +147,9 @@ Router.delete('/claimbyid/:id',authenticateToken,async (req,res)=>{
 })
 Router.get('/pending-bills/',authenticateToken,async (req, res) => {
     try {
-        const pendingBills = await claimModel.find({"status":"pending"});
+        const pendingBills = await claimModel.find({
+            mId: req.user.eId,
+            status:'pending' });
         res.json(pendingBills);
     } catch (err) {
         console.error(err);
@@ -124,7 +160,9 @@ Router.get('/pending-bills/',authenticateToken,async (req, res) => {
 Router.get('/approved-bills/',authenticateToken, async (req, res) => {
 
     try {
-        const approvedBills = await claimModel.find({status:'approved'});
+        const approvedBills = await claimModel.find({
+            mId: req.user.eId,
+            status:'approved' });
         res.json(approvedBills);
     } catch (err) {
         console.error(err);
@@ -134,7 +172,9 @@ Router.get('/approved-bills/',authenticateToken, async (req, res) => {
 Router.get('/rejected-bills/',authenticateToken,async (req, res) => {
 
     try {
-        const rejectedBills = await claimModel.find({status:'rejected'});
+        const rejectedBills = await claimModel.find({
+            mId: req.user.eId,
+            status:'rejected'});
         res.json(rejectedBills);
     } catch (err) {
         console.error(err);
