@@ -20,10 +20,10 @@ const MainContent = () => {
                     endpoint = 'http://localhost:3001/api/manager/pending-claims';
                 } else if (activeTab === 'approved') {
                     navigate(`/managerDashboard/`)
-                    endpoint = 'http://localhost:3001/api/manager/approved-bills';
+                    endpoint = 'http://localhost:3001/api/manager/approved-claims';
                 } else if (activeTab === 'rejected') {
                     navigate(`/managerDashboard/`)
-                    endpoint = 'http://localhost:3001/api/manager/rejected-bills';
+                    endpoint = 'http://localhost:3001/api/manager/rejected-claims';
                 }
                 const response = await axios.get(endpoint, {
                     headers: {
@@ -37,7 +37,7 @@ const MainContent = () => {
         };
 
         fetchClaims();
-    }, [activeTab, token]);
+    }, []);
 
     const RenderClaims = ({claims}) => {
         return claims.map(claim => (

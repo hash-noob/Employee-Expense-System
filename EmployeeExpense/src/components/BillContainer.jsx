@@ -67,12 +67,10 @@ const BillContainer = () => {
   
 
   const onSubmit=async (data)=>{
-    const formData = new FormData()
-    formData.append('image',data.billFile)
-
+    
     try{
       const res = await axios.post("http://localhost:3001/api/user/bills",data)
-      const resp = await axios.post("http://localhost:3001/imgUpload",formData)
+      console.log(res.data)
       if(res.status==200){
         setBills([...bills,{
           billId: res.data.billId,

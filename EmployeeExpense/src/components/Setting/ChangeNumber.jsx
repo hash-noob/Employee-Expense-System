@@ -38,7 +38,12 @@ function ChangeNumber(){
         }
     }
 
-    const handleBack = ()=>(navigate('/dashboard/settings'))
+    const handleBack = ()=>{ 
+    if(localStorage.getItem('role')){
+        navigate('/managerDashboard/settings')
+    }else{
+    navigate('/dashboard/settings')
+    }}
     const handleSave =async ()=>{
         try{
             const res = await axios.post("http://localhost:3001/api/user/ChangeNumber",

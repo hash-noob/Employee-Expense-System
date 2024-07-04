@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import BillContainer from './BillContainer';
 
@@ -34,6 +34,7 @@ const ClaimDetails = ({claim}) => {
   const [bills, setBills] = useState([]);
   const token = localStorage.getItem('token');
   const {billsArray} = JSON.parse(localStorage.getItem('claim'));
+  const Navigate = useNavigate()
 
   useEffect(() => {
     const fetchClaimDetails = async () => {
@@ -109,7 +110,7 @@ const ClaimDetails = ({claim}) => {
       await Promise.all(updateBillPromises);
   
       alert("Claim Approved");
-      console.log("approved");
+      Navigate('/managerDashboard')
     } catch (error) {
       console.log('Error approving claim:', error);
     }
@@ -140,29 +141,11 @@ const ClaimDetails = ({claim}) => {
       await Promise.all(updateBillPromises);
   
       alert("Claim Rejected");
-      console.log("rejected");
+      Navigate('/managerDashboard')
     } catch (error) {
       console.log('Error approving claim:', error);
     }
   };
-  
-
-  // const handleReject = async (claim) => {
-  //   try {
-  //     const updatedClaim=await axios.put(`http://localhost:3001/api/manager/claimbyid/${claim.cId}`, {
-  //       status: 'rejected'
-  //     }, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`
-  //       }
-  //     });
-  //     //setClaim(prevClaim => ({ ...prevClaim, status: 'rejected' }));
-      
-  //     alert("Claim rejected")
-  //   } catch (error) {
-  //     console.log('Error rejecting claim');
-  //   }
-  // };
   const activeTab = claim.status === 'pending' ? 'pending' : (claim.status === 'approved' ? 'approved' : 'rejected');
   return (
     <div className="claim-details max-h-screen grid grid-cols-1 lg:grid-cols-2 gap-4">

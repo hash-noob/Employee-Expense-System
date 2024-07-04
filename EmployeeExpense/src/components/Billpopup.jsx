@@ -18,24 +18,22 @@ function BillPopup({ onClose, onSubmit }){
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let eId = localStorage.getItem('eId');
-    let status = 'pending';
-    const formData = new FormData();
-    formData.append('eId', eId);
-    formData.append('billId', billId);
-    formData.append('billAmount', billAmount);
-    if (billImage) {
-      formData.append('billImage', billImage);
-    }
-    formData.append('category', category);
-    formData.append('merchant', merchant);
-    formData.append('remark', remark);
-    formData.append('datedOn', datedOn);
-    formData.append('status', status);
-    formData.append('paymentMethod', paymentMethod);
-  
+    let eId = localStorage.getItem('eId')
+    let status ='pending'
+    const formData = {
+      eId,
+      billId,
+      billAmount,
+      billImage,
+      category,
+      merchant,
+      remark,
+      datedOn,
+      status,
+      paymentMethod
+    };
     onSubmit(formData);
-    onClose();
+    onClose()
   };
   
 

@@ -29,17 +29,7 @@ function authenticateToken(req, res, next) {
         res.status(500).json({ error: 'An error occurred while retrieving claims' });
     }
 })
-  Router.get('/pending-claims', authenticateToken, async (req, res) => {
-    try {
-        const claims = await claimModel.find({
-                                            mId: req.user.eId,
-                                            status:'pending' })
-        res.json(claims);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: 'An error occurred while retrieving claims' });
-    }
-});
+
 Router.post('/bills',authenticateToken,async (req,res)=>{
     const bills = req.body;
     try{
@@ -145,11 +135,10 @@ Router.delete('/claimbyid/:id',authenticateToken,async (req,res)=>{
         res.status(500).json({error:'An error occured while retrieving expenses'})
     }
 })
-Router.get('/pending-bills/',authenticateToken,async (req, res) => {
+Router.get('/pending-claims/',authenticateToken,async (req, res) => {
     try {
-        const pendingBills = await claimModel.find({
-            mId: req.user.eId,
-            status:'pending' });
+        const pendingBills = await claimModel.find({mId: req.user.eId,
+            status:'pending'});
         res.json(pendingBills);
     } catch (err) {
         console.error(err);
@@ -157,24 +146,20 @@ Router.get('/pending-bills/',authenticateToken,async (req, res) => {
     }
 });
 
-Router.get('/approved-bills/',authenticateToken, async (req, res) => {
+Router.get('/approved-claims/',authenticateToken, async (req, res) => {
 
     try {
-        const approvedBills = await claimModel.find({
-            mId: req.user.eId,
-            status:'approved' });
+        const approvedBills = await claimModel.find({mId: req.user.eId,status:'approved'});
         res.json(approvedBills);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'An error occurred while retrieving expenses' });
     }
 });
-Router.get('/rejected-bills/',authenticateToken,async (req, res) => {
+Router.get('/rejected-claims/',authenticateToken,async (req, res) => {
 
     try {
-        const rejectedBills = await claimModel.find({
-            mId: req.user.eId,
-            status:'rejected'});
+        const rejectedBills = await claimModel.find({mId: req.user.eId,status:'rejected'});
         res.json(rejectedBills);
     } catch (err) {
         console.error(err);

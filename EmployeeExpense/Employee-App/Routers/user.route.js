@@ -15,9 +15,9 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
       cb(null, Date.now() + '-' + file.originalname);
     },
-  });
+});
   
-  const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 async function hashPassword(plainPassword) {
     const saltRounds = 10;
@@ -88,7 +88,6 @@ function authenticateToken(req, res, next) {
   }
 
 Router.get('/pending-bills',authenticateToken, async (req, res) => {
-
     const eId = req.user;
     try {
         const pendingBills = await billsModel.find({ eId : eId, status: 'pending' });
@@ -152,12 +151,12 @@ Router.get('/managers',async (req,res)=>{
     res.send(managers)
 })
 
-Router.post('/bills', upload.single('billImage'), async (req, res) => {
+Router.post('/bills', async (req, res) => {
+
     try {
       const { eId, billId, billAmount, category, merchant, remark, datedOn, status, paymentMethod } = req.body;
       const billImage = req.file ? req.file.path : null;
-  
-      const newBill = new billsmodel({
+      const newBill = new billsModel({
         eId,
         billId,
         billAmount,
@@ -178,20 +177,33 @@ Router.post('/bills', upload.single('billImage'), async (req, res) => {
   });
 
 Router.post("/fileClaim",async (req,res)=>{
-    result = await claimModel.create(req.body)
-    res.send(result)
+    const {billsArray} = req.body
+    try{    
+        result = await claimModel.create(req.body)
+        update = await billsModel.updateMany({billId:{$in : billsArray}},{status : 'under review'})
+        if (update)
+            res.send(result)
+        else
+            res.send('Failed to update bills')
+    }
+    catch(error){
+        console.log(err)
+    }
 })
 
 
 Router.put('/claims/withdraw',async(req,res)=>{
     
-    const {cId}=req.body;
+    const {cId,billsArray}=req.body;
+    
     const updatedClaim = await claimModel.findOneAndUpdate({"cId" : cId},{"status":"withdraw"})
+    const updatedBills = await billsModel.updateMany({billId:{$in : billsArray}},{status : 'pending'})
+    
     if(updatedClaim){
-        res.status(200).json(updatedClaim)
+        res.status(200).json({updatedClaim,updatedBills})
     }
     else{
-        res.status(404).send("error")
+        res.status(500).send("error")
     }
 })
 
@@ -225,12 +237,28 @@ Router.post('/ChangeNumber',authenticateToken,async (req,res)=>{
         if(password === currpass){
             const user = await userModel.findOneAndUpdate({eId},{"mobileNumber":newNumber})
             if(user)
-                res.status(200).send("Succesfully changed!!") 
+                res.status(200).send("Succesfully changed!!")  
         }else{
             res.status(201).send("Wrong password")
         }
     }catch(err){
         console.log(err)
+    }
+})
+
+Router.get('/statistics',authenticateToken,async (req,res)=>{
+    
+    const eId = req.user
+    try {
+        const monthly_exps = await billsModel.aggregate([{$match : {"eId" : eId}},{
+            $group :{
+                _id : {$month : "$datedOn"},
+                amt : {$sum: "$billAmount"}
+            }
+        }])
+        res.json(monthly_exps)
+    } catch (error) {
+        console.log(error)
     }
 })
 
