@@ -14,6 +14,7 @@ import ClaimDetails from './ClaimDetails.jsx';
 import './manager.css';
 
 const Dashboard = () => {
+  localStorage.setItem('role','Manager')
   return (
     <div className="manager-dashboard">
       <Sidebar />

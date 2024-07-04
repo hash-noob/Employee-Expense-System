@@ -1,21 +1,10 @@
 // StatisticsPage.jsx
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
-const data = [
-  { month: 'Jan', expense: 400 },
-  { month: 'Feb', expense: 300 },
-  { month: 'Mar', expense: 200 },
-  { month: 'Apr', expense: 278 },
-  { month: 'May', expense: 189 },
-  { month: 'Jun', expense: 239 },
-  { month: 'Jul', expense: 349 },
-  { month: 'Aug', expense: 200 },
-  { month: 'Sep', expense: 278 },
-  { month: 'Oct', expense: 189 },
-  { month: 'Nov', expense: 239 },
-  { month: 'Dec', expense: 349 },
-];
+const monthify = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Oct','Nov','Dec'];
+
 
 const expenseTypes = [
   { name: 'Food', value: 400 },
@@ -27,8 +16,27 @@ const expenseTypes = [
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const StatisticsPage = () => {
-  const totalExpenses = data.reduce((acc, item) => acc + item.expense, 0);
-  const averageMonthlyExpense = (totalExpenses / data.length).toFixed(2);
+
+  const [monthlyData,setMonthlyData] = useState() 
+
+  useEffect(()=>{
+    const fetchStats = async ()=>{
+        const res = await axios.get('http://localhost:3001/api/user/statistics',{
+          headers:{
+            Authorization : "Bearer "+localStorage.getItem('token')
+          }
+        })
+        let data = res.data
+        setMonthlyData(data.map((ele)=>({_id : monthify[ele._id-1],
+                                          amt : ele.amt})))
+        console.log(monthlyData)
+    }
+    fetchStats()
+  },[])
+  const totalExpenses = 20000;
+  // data.reduce((acc, item) => acc + item.expense, 0);
+  const averageMonthlyExpense =457.3;
+  //  (totalExpenses / data.length).toFixed(2);
   const acceptancePercentage = ((5 / 7) * 100).toFixed(2); // Example calculation
 
   return (
@@ -36,13 +44,13 @@ const StatisticsPage = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">Statistics</h2>
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Details</h3>
-        <p>Average Monthly Expense: ${averageMonthlyExpense}</p>
+        <p>Average Monthly Expense:  Rs.{averageMonthlyExpense}</p>
         <p>Acceptance Percentage of Claims: {acceptancePercentage}%</p>
       </div>
       <div className="mb-8 p-4  bg-white rounded-lg shadow-md hover:shadow-xl">
         <h3 className="text-xl font-semibold mb-4">Monthly Expenses</h3>
         <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          <AreaChart data={monthlyData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -50,10 +58,10 @@ const StatisticsPage = () => {
             </linearGradient>
           </defs>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
+            <XAxis dataKey="_id" />
             <YAxis />
             <Tooltip />
-            <Area type="monotone" dataKey="expense" stroke="#8884d8" fill="url(#colorExpense)" />
+            <Area type="monotone" dataKey="amt" stroke="#8884d8" fill="url(#colorExpense)" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

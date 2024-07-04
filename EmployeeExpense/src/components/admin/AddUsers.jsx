@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useEmployee } from './EmployeeContext';
+import InfoIcon from '@mui/icons-material/Info';
+import demoImg from '../../assets/demo.png';
 import * as XLSX from 'xlsx';
 import './admin.css';
 import '../App.css';
@@ -27,6 +29,10 @@ function AddUsers() {
     const email = form.querySelector("#mail").value;
     const mobileNumber = form.querySelector("#Mnumber").value;
 
+    if(mobileNumber.length!=10){
+      setMessage('Invalid MobileNumber')
+      return
+    }
     try {
       const status = await addEmployee({ eId, email, password: eId, role, mobileNumber, username: eId });
       if(status) setMessage(role === 'user' ? 'User added successfully!' : 'Manager added successfully!');
@@ -66,6 +72,8 @@ function AddUsers() {
     }
   };
 
+  const [showDemo,setShowDemo] = useState(false)
+
   return (
     <div>
       <div className='card-container-dashboard'>
@@ -89,7 +97,7 @@ function AddUsers() {
           </div>
           <button type="submit" className="btn">Add</button>
           {message && (
-            <div className="popup">
+            <div className="popup rounded-lg">
               <h2>{message}</h2>
             </div>
           )}
@@ -124,6 +132,10 @@ function AddUsers() {
           <div className="modal-content">
             <span className="close" onClick={() => setShowModal(false)}>&times;</span>
             <h2>Upload Users</h2>
+            <div onClick={()=>{setShowDemo(!showDemo)}}>
+            <InfoIcon/>
+            {showDemo && <img height="200px" width="200px" src={demoImg}></img>}
+            </div>
             <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
             <button onClick={handleUpload}>Upload</button>
           </div>

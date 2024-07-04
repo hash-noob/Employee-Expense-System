@@ -67,31 +67,29 @@ const BillContainer = () => {
   
 
   const onSubmit=async (data)=>{
-    const image = {
-      "img" : data.billFile,
-      "billId" : data.billId
-    }
+    
     try{
       const res = await axios.post("http://localhost:3001/api/user/bills",data)
+      console.log(res.data)
       if(res.status==200){
         setBills([...bills,{
           billId: res.data.billId,
-          billAmount: res.data.billAmount,
+          billAmount: Number(res.data.billAmount),
           category: res.data.category,
-          merchant: res.data.merchant, 
-          remark: res.data.remark, 
+          merchant: res.data.merchant,
+          remark: res.data.remark,
           datedOn: res.data.datedOn,
-          paymentMethod: res.data.paymentMethod
-        }])
-        const billsArray = bills.map((e)=>e.billId)
-        localStorage.setItem('billsArray',billsArray)
+          paymentMethod: res.data.paymentMethod,
+        }]);
+        const billsArray = bills.map((e) => e.billId);
+        localStorage.setItem('billsArray', billsArray);
       }
+    } catch (err) {
+      console.log(err);
+      alert("Bill with given id already exists or BillAmount is not numeric");
     }
-    catch(err){
-      console.log(err)
-      alert("Bill with given id already exist or BillAmount is not numeric")
-    }
-  }
+  };
+  
 
   return (
     <div className="p-6">

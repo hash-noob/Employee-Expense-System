@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RequestCard from "./RequestCard";
 import axios from "axios";
 import Claimpopup from "./Claimpopup";
+import billsContext from "./BillsContext";
 
 
 const RequestList = () => {
     const [claims,setclaims] = useState([])
     const [claimPopup,setClaimPopup] = useState(false)
+    const {bills,setBills} = useContext(billsContext)
 
   function showClaimPop(){
     setClaimPopup(true)
@@ -22,15 +24,7 @@ const RequestList = () => {
           Authorization:"Bearer "+localStorage.getItem('token')
         }
       })
-
-      let temp=[]
-      for(let ele of res.data){
-        temp.push({
-          title : ele.cId,
-          description : ele.title,
-        })
-      }
-      setclaims(temp)
+      setclaims(res.data)
     }
 
     useEffect(()=>{getclaims()},[])
@@ -40,7 +34,8 @@ const RequestList = () => {
     const onSubmit = async (formData)=>{
       const res = await axios.post('http://localhost:3001/api/user/fileClaim',formData)
       if(res.status===200){
-        setclaims((prev)=> [...prev,{title :res.data.cId,description : res.data.title}])
+        setclaims((prev)=> [...prev,res.data])
+        setBills(bills.filter((ele)=>(!formData.billsArray.includes(ele.billId))))
       }
     }
 

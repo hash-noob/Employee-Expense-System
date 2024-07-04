@@ -25,6 +25,7 @@
 import React,{ useContext, useState } from "react";
 import axios from "axios";
 import {format} from 'date-fns';
+import billImg from '../../assets/bill.jpg'
 
 const BillCard = ({ bill }) => {
     
@@ -96,6 +97,10 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Dated On:</label>
             <p className="text-gray-700">{format(new Date(datedOn), 'MM/dd/yyyy')}</p>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold">Bill Image</label>
+            <img src={billImg} alt="bill image" />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Payment Method:</label>

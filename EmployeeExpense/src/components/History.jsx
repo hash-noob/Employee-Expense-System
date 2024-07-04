@@ -7,6 +7,11 @@ const History = () => {
     const [claims, setClaims] = useState([]);
     const [activeSection, setActiveSection] = useState('bills');
 
+    useEffect(()=>{
+       document.getElementById('bills').style ='opacity:100% '
+        document.getElementById('claims').style =' opacity:40% '
+    },[])
+
     const handleSectionClick = (section) => {
       if(section=='bills'){
         document.getElementById('bills').style ='opacity:100% '

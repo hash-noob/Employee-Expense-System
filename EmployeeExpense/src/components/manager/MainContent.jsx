@@ -16,11 +16,14 @@ const MainContent = () => {
             try {
                 let endpoint = '';
                 if (activeTab === 'pending') {
+                    navigate(`/managerDashboard/`)
                     endpoint = 'http://localhost:3001/api/manager/pending-claims';
                 } else if (activeTab === 'approved') {
-                    endpoint = 'http://localhost:3001/api/manager/approved-bills';
+                    navigate(`/managerDashboard/`)
+                    endpoint = 'http://localhost:3001/api/manager/approved-claims';
                 } else if (activeTab === 'rejected') {
-                    endpoint = 'http://localhost:3001/api/manager/rejected-bills';
+                    navigate(`/managerDashboard/`)
+                    endpoint = 'http://localhost:3001/api/manager/rejected-claims';
                 }
                 const response = await axios.get(endpoint, {
                     headers: {
@@ -34,7 +37,7 @@ const MainContent = () => {
         };
 
         fetchClaims();
-    }, [activeTab, token]);
+    }, []);
 
     const RenderClaims = ({claims}) => {
         return claims.map(claim => (
@@ -51,14 +54,14 @@ const MainContent = () => {
             </div>
         ));
     };
-
+    console.log(activeTab);
     return (
         <div className="manager-main-content">
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className="content">
+            <div className="content" style={{height:"100vh"}}>
                 <Routes>
-                    <Route path="/" element={<RenderClaims claims={claims}/> }/>
-                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} />} />
+                    <Route path="/" element={<RenderClaims claims={claims} /> }/>
+                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
                 </Routes>
             </div>
         </div>
