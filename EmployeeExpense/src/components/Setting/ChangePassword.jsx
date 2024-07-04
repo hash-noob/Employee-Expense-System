@@ -12,7 +12,13 @@ function ChangePassword(){
     const [currentPassword,setCurrentPassword] = useState('')
     const [newPassword,setNewPassword] = useState('')
 
-    const handleBack = ()=>(navigate('/dashboard/settings'))
+    const handleBack = ()=>{
+        if(localStorage.getItem('role')){
+            navigate('/managerDashboard/settings')
+        }else{
+        navigate('/dashboard/settings')
+        }
+    }
 
     const handleSave = async () => {
         try{

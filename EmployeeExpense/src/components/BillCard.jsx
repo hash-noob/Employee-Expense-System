@@ -1,7 +1,8 @@
-import React,{ useContext, useState } from "react";
+import React,{ useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {format} from 'date-fns'
 import billsContext from "./BillsContext";
+import image from '../assets/bill.jpg'
 
 const BillCard = ({ bill }) => {
     
@@ -83,6 +84,10 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
             <p className="text-gray-700">{merchant}</p>
           </div>
           <div className="mb-4">
+            <label className="block text-gray-700 font-bold">Bill Image:</label>
+             <img src={image} alt="bill_image" />
+          </div>
+          <div className="mb-4">
             <label className="block text-gray-700 font-bold">Remark:</label>
             <p className="text-gray-700">{remark}</p>
           </div>
@@ -94,14 +99,6 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
             <label className="block text-gray-700 font-bold">Payment Method:</label>
             <p className="text-gray-700">{paymentMethod}</p>
           </div>
-          <div className="mb-4">
-          <label className="block text-gray-700 font-bold">Bill Image:</label>
-          {billImage ? (
-            <img src={`http://localhost:3001/${billImage}`} alt="Bill" className="w-full h-auto" />
-          ) : (
-            <p className="text-gray-700">No image available</p>
-          )}
-        </div>
           <div className="flex justify-end space-x-3">
           <button 
               onClick={onRemove} 

@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {useAuth} from './AuthProvider'
+import PasswordInput from './PasswordInput';
 import './App.css';
 
 function Login() {
  var auth = useAuth();
+ const [password,setPassword] = useState()
 const navigate = useNavigate();
 const handleLogin = async (e) => {
   e.preventDefault();
   
   const eId = document.getElementById("eId").value;
-  const password = document.getElementById("password").value;
   const messageElement = document.getElementById('message');
   
   try {
@@ -49,12 +50,9 @@ const handleLogin = async (e) => {
           </div>
           <div className="form-group">
             <label>Password:</label>
-            <input id="password" type="password" name='password' required />
+            <PasswordInput  onchange={(e)=>(setPassword(e.target.value))} placeholder='' id='password' />
           </div>
           <button type="submit"  className="btn">Login</button>
-          <p>
-            Don't have an account? <Link to="/signup">Sign up</Link>
-          </p>
           <h2 id="message"></h2>
         </form>
       </div>

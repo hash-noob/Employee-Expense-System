@@ -19,17 +19,16 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route element={<ProtectedRoute/>}>
-          <Route path="/dashboard/*" element={<UserDashboard />} />
-          <Route path="/adminDashboard/statistics" element={<AdminStats />} />
-          <Route path="/adminDashboard/*" element={
-              <EmployeeProvider>
-                <AdminDashboard />
-              </EmployeeProvider>
-            } />
-          <Route path="/managerDashboard/*" element={<Dashboard/>}/>
-          
-        </Route>
+          <Route element={<ProtectedRoute/>}>
+            <Route path="/dashboard/*" element={<UserDashboard />} />
+            <Route path="/adminDashboard/statistics" element={<AdminStats />} />
+            <Route path="/adminDashboard/*" element={
+                <EmployeeProvider>
+                  <AdminDashboard />
+                </EmployeeProvider>
+              } />
+            <Route path="/managerDashboard/*" element={<Dashboard/>}/>
+          </Route>
       </Routes>
     </Router>
     </AuthProvider>
