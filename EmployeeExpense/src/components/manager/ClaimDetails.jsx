@@ -62,7 +62,7 @@ const ClaimDetails = ({claim}) => {
           Authorization: `Bearer ${token}`
         }
       });
-      setClaim(prevClaim => ({ ...prevClaim, status: 'approved' }));
+      //setClaim(prevClaim => ({ ...prevClaim, status: 'approved' }));
     } catch (error) {
       console.log('Error approving claim');
     }
@@ -77,7 +77,7 @@ const ClaimDetails = ({claim}) => {
           Authorization: `Bearer ${token}`
         }
       });
-      setClaim(prevClaim => ({ ...prevClaim, status: 'rejected' }));
+      //setClaim(prevClaim => ({ ...prevClaim, status: 'rejected' }));
     } catch (error) {
       console.log('Error rejecting claim');
     }
