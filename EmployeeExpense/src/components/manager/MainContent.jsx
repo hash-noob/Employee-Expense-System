@@ -37,7 +37,7 @@ const MainContent = () => {
         };
 
         fetchClaims();
-    }, []);
+    }, [activeTab]);
 
     const RenderClaims = ({claims}) => {
         return claims.map(claim => (

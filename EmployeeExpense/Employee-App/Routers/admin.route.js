@@ -3,13 +3,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userModel = require('../Models/user.model');
 const claimModel = require('../Models/claims.model');
+const billsModel = require('../Models/bills.model')
 const sendMail = require('../mailer'); // Import the mailer
 const Router = express.Router();
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    console.log('Token received: ', token); // Log the token received
+    
     if (!token) return res.sendStatus(401);
     jwt.verify(token, 'secretKey', (err, user) => {
         if (err) return res.sendStatus(403);
@@ -28,6 +29,25 @@ async function hashPassword(plainPassword) {
         console.log(err);
     }
 }
+
+const mergeArrays = (arr1, arr2) => {
+    const map = new Map();
+
+    arr1.forEach(item => {
+        map.set(item._id, { _id: item._id, bills: item.bills, claims: 0 });
+    });
+
+    arr2.forEach(item => {
+        if (map.has(item._id)) {
+            map.set(item._id, { ...map.get(item._id), claims: item.claims });
+        } else {
+            map.set(item._id, { _id: item._id, bills: 0, claims: item.claims });
+        }
+    });
+
+    return Array.from(map.values());
+};
+
 
 Router.post('/addUser', authenticateToken, async (req, res) => {
     const exists = await userModel.find({ eId: req.body.eId });
@@ -50,19 +70,45 @@ Router.post('/addUser', authenticateToken, async (req, res) => {
 });
 
 Router.get('/', authenticateToken, async (req, res) => {
-    const users = await userModel.find({});
+    const users = await userModel.find({role:{$ne : "admin"}});
     res.status(200).json(users);
 });
 
 Router.get('/stats', async (req, res) => {
     try {
-        const userCount = await userModel.countDocuments({});
-        console.log(`User count: ${userCount}`);
-        const managerCount = await userModel.countDocuments({ role: 'manager' });
-
-        console.log(userCount);
-        res.status(200).json({ userCount, managerCount });
+        const monthly_bills = await billsModel.aggregate([{
+            $group :{
+                _id : {$month : "$datedOn"},
+                bills : {$sum: "$billAmount"}
+            }},{
+                $sort : {"_id":1}
+            }
+        ])
+        const monthly_claims = await claimModel.aggregate([{
+            $group :{
+                _id : {$month : "$createdAt"},
+                claims : {$sum: "$totalAmount"}
+            }},{
+                $sort : {"_id":1}
+            }
+        ])
+        const settled_claims = await claimModel.aggregate([{$match :{status:"approved"}},{
+            $group:{
+                _id : {$month : "$createdAt"},
+                count : {$sum : 1}
+            }},{
+                $sort : {"_id":1}
+            }])
+        const category_exps = await billsModel.aggregate([{
+                $group :{
+                    _id : "$category",
+                    amt : {$sum: "$billAmount"}
+                }
+            }])
+        const monthly_exps = mergeArrays(monthly_bills,monthly_claims)
+        res.status(200).json({monthly_exps,category_exps,settled_claims });
     } catch (err) {
+        console.log(err)
         res.status(500).json({ error: err.message });
     }
 });
@@ -70,7 +116,6 @@ Router.get('/stats', async (req, res) => {
 Router.get('/claims', authenticateToken, async (req, res) => {
     try {
         const claims = await claimModel.find({});
-        console.log(claims);
         res.status(200).json(claims);
     } catch (err) {
         res.status(500).json({ error: err.message });

@@ -86,6 +86,7 @@ function BillPopup({ onClose, onSubmit }){
               <option value="travel">Travel</option>
               <option value="accommodation">Accommodation</option>
               <option value="medical">Medical</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <div className="mb-4">

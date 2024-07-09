@@ -254,9 +254,17 @@ Router.get('/statistics',authenticateToken,async (req,res)=>{
             $group :{
                 _id : {$month : "$datedOn"},
                 amt : {$sum: "$billAmount"}
+            }},{
+                $sort : {"_id":1}
+            }
+        ])
+        const category_exps = await billsModel.aggregate([{$match : {"eId" : eId}},{
+            $group :{
+                _id : "$category",
+                amt : {$sum: "$billAmount"}
             }
         }])
-        res.json(monthly_exps)
+        res.json({monthly_exps,category_exps})
     } catch (error) {
         console.log(error)
     }
