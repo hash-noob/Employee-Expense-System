@@ -25,7 +25,7 @@ const Dashboard = () => {
               <MainContent />
           </BillsProvider>} />
           <Route path="/settings" element={<Settings role="manager"/>} />
-          <Route path="/settings/ChangePassword" element={<ChangePassword/>} />
+          <Route path="/settings/ChangePassword" element={<ChangePassword />} />
           <Route path="/settings/ChangeNumber" element={<ChangeNumber/>} />
           <Route 
             path="/managebills" 

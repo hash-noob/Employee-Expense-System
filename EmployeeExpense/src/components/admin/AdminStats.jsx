@@ -1,7 +1,7 @@
 // StatisticsPage.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Legend,Bar,AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell ,BarChart} from 'recharts';
-import Sidebar from './Sidebar.jsx';
+import axios from 'axios'
 
 const data = [
   { month: 'Jan', expense: 40 },
@@ -26,115 +26,86 @@ const expenseTypes = [
   { name: 'Other', value: 200 }
 ];
 
-const userData = [
-  {
-    "month": "Jan",
-    "bills": 4000,
-    "claims": 2400
-  },
-  {
-    "month": "Feb",
-    "bills": 3000,
-    "claims": 1398
-  },
-  {
-    "month": "Mar",
-    "bills": 2000,
-    "claims": 9800
-  },
-  {
-    "month": "Apr",
-    "bills": 2780,
-    "claims": 3908
-  },
-  {
-    "month": "May",
-    "bills": 1890,
-    "claims": 4800
-  },
-  {
-    "month": "Jun",
-    "bills": 2390,
-    "claims": 3800
-  },
-  {
-    "month": "Jul",
-    "bills": 3490,
-    "claims": 4300
-  }
-]
 
-
+const monthify = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Oct','Nov','Dec'];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042','#red'];
 
 const AdminStats = () => {
-  const totalExpenses = data.reduce((acc, item) => acc + item.expense, 0);
-  const averageMonthlyExpense = (totalExpenses / data.length).toFixed(2);
-  const acceptancePercentage = ((5 / 7) * 100).toFixed(2); // Example calculation
+  
+  const [monthly_exps,setMonthlyExps] = useState()
+  const [categorical_exps,setCategoricalExps] = useState()
+  const [settled_claims,setSettledClaims] = useState()
+
+  const [bar,setBar] = useState(false)
+  const [pie,setPie] = useState(false)
+  const [area,setArea] = useState(false)
+
+  useEffect(()=>{
+    if(monthly_exps)
+      setBar(true)
+  },[monthly_exps])
+
+  useEffect(()=>{
+    if(categorical_exps)
+      setPie(true)
+  },[categorical_exps])
+
+  useEffect(()=>{
+    if(settled_claims)
+      setArea(true)
+  },[settled_claims])
+
+  useEffect(()=>{
+    const fetchStats = async () => {
+      console.log("called")
+      try {
+        const response = await axios.get('http://localhost:3001/api/admin/stats');
+        const {monthly_exps,category_exps,settled_claims} = response.data
+        console.log(category_exps)
+        setMonthlyExps(monthly_exps.map((ele)=>({_id : monthify[ele._id-1], bills : ele.bills, claims:ele.claims})))
+        setCategoricalExps(category_exps)
+        setSettledClaims(settled_claims.map((ele)=>({_id : monthify[ele._id-1], count : ele.count})))
+      } catch (error) {
+       console.log(error) 
+      }
+    }
+    fetchStats()
+  },[])
 
   return (
-    // <div className='flex'>
     <div style={{marginTop:"40px"}}>
-      {/* <Sidebar/>
-    <div className='main-content1'>
-    <div className=" m-5  p-6 bg-white rounded-lg shadow-md hover:shadow-lg bg-gra-01 ">
-      <h2 className="text-2xl font-bold mb-4 text-center">Statistics</h2>
-      
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold mb-4">Details</h3>
-        <div className='flex justify-between'>
-          <div className='bg-white rounded-lg shadow-md p-5 font-sans'>
-            Average Monthly Expense:
-            <div className='font-bold text-4xl p-3 text-center my-2'>
-             ${averageMonthlyExpense}
-            </div>
-          </div>
-          <div className='bg-white rounded-lg shadow-md p-5 font-sans'>
-            Average Monthly Claims:
-            <div className='font-bold text-4xl p-3 text-center my-2'>
-             {4.5} claims
-            </div>
-          </div>
-          <div className='bg-white rounded-lg shadow-md p-5 font-sans '>
-              Acceptance Percentage of Claims:
-              <div className='font-bold text-4xl p-3 text-center my-2'>
-                  {acceptancePercentage}% 
-             </div>
-          </div>
-        </div>
-      </div> */}
       <div className='mb-8 p-4  bg-white rounded-lg shadow-md hover:shadow-xl'> 
       <h3 className="text-xl font-semibold mb-4">Bills vs Claims</h3>
         <ResponsiveContainer width="100%" height={300}>
-        <BarChart width={730} height={250} data={userData}>
+        {bar && <BarChart width={730} height={250} data={monthly_exps}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
+          <XAxis dataKey="_id" />
           <YAxis />
           <Tooltip />
           <Legend />
           <Bar dataKey="claims" fill="#8884d8" />
           <Bar dataKey="bills" fill="#82ca9d" />
-        </BarChart>
+        </BarChart>}
         </ResponsiveContainer>
       </div>
       <div className="mb-8 p-4  bg-white rounded-lg shadow-md hover:shadow-xl">
         <h3 className="text-xl font-semibold mb-4">Expense Types</h3>
         <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie data={expenseTypes} cx="50%" cy="50%" labelLine={false} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} outerRadius={100} fill="#8884d8" dataKey="value">
-              {expenseTypes.map((entry, index) => (
+          {pie && <PieChart>
+            <Pie data={categorical_exps} cx="50%" cy="50%" labelLine={false} label={({ _id, percent }) => `${_id} ${(percent * 100).toFixed(1)}%`} outerRadius={100} fill="#8884d8" dataKey="amt">
+              {categorical_exps.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip />
-          </PieChart>
+          </PieChart>}
         </ResponsiveContainer>
       </div>
       <div className="mb-8 p-4  bg-white rounded-lg shadow-md hover:shadow-xl">
         <h3 className="text-xl font-semibold mb-4">Claims Reimbersed by company</h3>
         <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          {area && <AreaChart data={settled_claims} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -142,16 +113,14 @@ const AdminStats = () => {
             </linearGradient>
           </defs>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
+            <XAxis dataKey="_id" />
             <YAxis />
             <Tooltip />
-            <Area type="monotone" dataKey="expense" stroke="#8884d8" fill="url(#colorExpense)" />
-          </AreaChart>
+            <Area type="monotone" dataKey="count" stroke="#8884d8" fill="url(#colorExpense)" />
+          </AreaChart>}
         </ResponsiveContainer>
       </div>
     </div>
-    // </div>
-    // </div>
   );
 };
 

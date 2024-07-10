@@ -53,13 +53,13 @@ export const EmployeeProvider = ({ children }) => {
           }
         });
         setClaims(response.data);
-        console.log(claims)
       } catch (error) {
         console.error('Failed to fetch claims:', error);
       }
     };
     fetchClaims();
   }, []);
+
 
   const addActivity = (activity) => {
     const updatedActivities = [activity, ...loadActivitiesFromLocalStorage()];
