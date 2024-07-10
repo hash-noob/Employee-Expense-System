@@ -35,7 +35,7 @@ const expenseschema = mongoose.Schema({
     remark:String, 
     datedOn:Date,
     status:String,
-    paymentMethod:String
+    paymentMethod:String,
 })
 const billsmodel=mongoose.model("BillsCollection",expenseschema)
 module.exports=billsmodel

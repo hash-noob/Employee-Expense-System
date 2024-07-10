@@ -16,7 +16,7 @@ import { useEmployee } from './EmployeeContext';
 const Dashboard = () => {
   const { employees } = useEmployee();
   const cardContents = [
-    { title: "No of Users", count: employees.filter(emp => emp.role === 'user').length },
+    { title: "No of Employees", count: employees.filter(emp => emp.role === 'user').length },
     { title: "No of Managers", count: employees.filter(emp => emp.role === 'manager').length },
   ];
 

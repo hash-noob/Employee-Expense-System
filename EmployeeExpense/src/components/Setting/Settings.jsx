@@ -2,20 +2,24 @@ import React from 'react';
 import ProfilePhoto from './ProfilePhoto';
 import { useNavigate } from 'react-router-dom';
 
+
 const SettingsPage = (props) => {
-  const {role}=props
+  const {role} = props;
   const navigate = useNavigate()
   
   const handleChangePassword = () => {
-    if(role==='user')
+    if(role=='user')
       navigate('/dashboard/settings/ChangePassword')
-    navigate('/managerDashboard/settings/ChangePassword')
+    else
+      navigate('/managerDashboard/settings/ChangePassword')
   };
 
   const handleChangeMobileNumber = () => {
-    if(role==='user')
+    if(role=='user')
       navigate('/dashboard/settings/ChangeNumber')
-    navigate('/managerDashboard/settings/ChangeNumber')
+    else
+      navigate('/managerDashboard/settings/ChangeNumber')
+    
   };
 
   return (

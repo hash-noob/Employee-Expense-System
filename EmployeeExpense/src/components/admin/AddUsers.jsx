@@ -60,7 +60,7 @@ function AddUsers() {
         // Attempt to add bulk users
         try {
          const status= await addBulkEmployees(users);
-          if(status)setMessage('Bulk users added successfully!');
+          if(status)setMessage('Bulk users added successfully!'); 
           else setMessage('Error: There was an issue adding bulk users.');
         } catch (err) {
           console.error("Error adding bulk users:", err);
