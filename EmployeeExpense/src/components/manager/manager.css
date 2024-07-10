@@ -60,6 +60,7 @@
   flex-grow: 1;
   padding: 0; /* Remove padding */
   margin: 0; /* Remove margin */
+  margin-left: 16rem;
 }
 
 .header {
@@ -90,6 +91,21 @@
   display: flex;
   width:100vw;
   height:100vh;
+  overflow:auto;
 }
 
 
+
+.manager-sidebar{
+  background-color: #111827;
+  color:white;
+  width:  256px;
+  min-height:100vh;
+  display:flex;
+  flex-direction: column;
+  position: fixed; /* Makes the sidebar fixed */
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  overflow-y: auto; 
+}
