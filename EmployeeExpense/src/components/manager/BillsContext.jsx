@@ -4,12 +4,9 @@
 // BillsContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
 const BillsContext = createContext();
-
 const BillsProvider = ({ children }) => {
   const [bills, setBills] = useState([]);
-
   useEffect(() => {
     const getBills = async () => {
       const response = await axios.get("http://localhost:3001/api/user/pending-bills", {
@@ -19,7 +16,6 @@ const BillsProvider = ({ children }) => {
       });
       setBills(response.data);
     };
-
     getBills();
   }, []);
 

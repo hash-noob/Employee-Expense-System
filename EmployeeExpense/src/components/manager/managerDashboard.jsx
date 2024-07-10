@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Sidebar from './sidebar.jsx';
 import MainContent from './MainContent.jsx';
@@ -22,9 +21,9 @@ const Dashboard = () => {
         <Routes>
           <Route path="/*" element={
             <BillsProvider>
-              <MainContent />
+              <MainContent/>
             </BillsProvider>}/>
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings role='manager'/>} />
           <Route path="/settings/ChangePassword" element={<ChangePassword />} />
           <Route path="/settings/ChangeNumber" element={<ChangeNumber/>} />
           <Route path="/history" element={<History/>}/>

@@ -4,6 +4,7 @@ const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const express = require("express")
+//const sendMail=require('../mailer')
 const Router = express.Router()
 
 function authenticateToken(req, res, next) {
@@ -39,7 +40,6 @@ Router.post('/bills',authenticateToken,async (req,res)=>{
         console.log(err)
     }
 })
-
 
 Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;

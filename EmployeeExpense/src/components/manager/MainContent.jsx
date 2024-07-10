@@ -31,17 +31,20 @@ const MainContent = () => {
                     }
                 });
                 setClaims(response.data);
+                
             } catch (error) {
                console.log(error)
             } 
         };
 
         fetchClaims();
-    }, []);
+    }, [activeTab]);
 
     const RenderClaims = ({claims}) => {
-        return claims.map(claim => (
-            <div className="card" key={claim.cId} onClick={() =>{navigate(`/managerDashboard/claims/${claim.cId}`)
+        return claims.map(claim =>{
+            console.log("hi",claim.status)
+            return (
+            <div className="card" key={claim.cId} onClick={() =>{navigate(`/managerDashboard/claims`)
                                                                 setSelectedClaim(claim)
                                                                 localStorage.setItem('claim',JSON.stringify(claim))}}>
                 <p>Employee ID: {claim.eId}</p>
@@ -52,7 +55,7 @@ const MainContent = () => {
                 <p>From Date: {new Date(claim.fromDate).toLocaleDateString()}</p>
                 <p>To Date: {new Date(claim.toDate).toLocaleDateString()}</p>
             </div>
-        ));
+        )});
     };
     console.log(activeTab);
     return (
@@ -61,7 +64,7 @@ const MainContent = () => {
             <div className="content" style={{height:"100vh"}}>
                 <Routes>
                     <Route path="/" element={<RenderClaims claims={claims} /> }/>
-                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
+                    <Route path="/claims" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
                 </Routes>
             </div>
         </div>

@@ -30,14 +30,22 @@ const ClaimCard = ({ claim, onApprove, onReject ,activeTab}) => {
 };
 
 const ClaimDetails = ({claim}) => {
+  const Navigate = useNavigate()
+  const [activeTab,setActiveTab]=useState();
   const { cId } = useParams();
   const [bills, setBills] = useState([]);
   const token = localStorage.getItem('token');
   const {billsArray} = JSON.parse(localStorage.getItem('claim'));
-  const Navigate = useNavigate()
+  
 
   useEffect(() => {
+    setActiveTab(claim.status === 'pending' ? 'pending' : (claim.status === 'approved' ? 'approved' : 'rejected'));
+    console.log(claim)
+    if(!claim){
+      Navigate('/managerDashboard')
+    }
     const fetchClaimDetails = async () => {
+     
       try {
         const res = await axios.post(`http://localhost:3001/api/manager/bills`,billsArray, {
           headers: {
@@ -146,14 +154,17 @@ const ClaimDetails = ({claim}) => {
       console.log('Error approving claim:', error);
     }
   };
-  const activeTab = claim.status === 'pending' ? 'pending' : (claim.status === 'approved' ? 'approved' : 'rejected');
+  
   return (
     <div className="claim-details max-h-screen grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div className="bills-section">
         <BillContainer bills={bills} setBills={setBills} />
       </div>
-      <div className="claim-info-section">
-        <ClaimCard claim={claim} onApprove={handleApprove} onReject={handleReject} activeTab={activeTab}/>
+      <div className="claim-info-section">{claim ? (
+          <ClaimCard claim={claim} onApprove={handleApprove} onReject={handleReject} activeTab={activeTab} />
+        ) : (
+          <p>No claim details available</p>
+        )}
       </div>
     </div>
   );
