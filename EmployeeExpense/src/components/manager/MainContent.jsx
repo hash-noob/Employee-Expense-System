@@ -37,7 +37,7 @@ const MainContent = () => {
         };
 
         fetchClaims();
-    }, []);
+    }, [activeTab]);
 
     const RenderClaims = ({claims}) => {
         return claims.map(claim => (
@@ -58,11 +58,13 @@ const MainContent = () => {
     return (
         <div className="manager-main-content">
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-            <div className="content" style={{height:"100vh"}}>
+            <div style={{height:"100vh",overflow:"scroll"}}>
+            <div className="content">
                 <Routes>
                     <Route path="/" element={<RenderClaims claims={claims} /> }/>
                     <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
                 </Routes>
+            </div>
             </div>
         </div>
     );

@@ -16,7 +16,7 @@ import './manager.css';
 const Dashboard = () => {
   localStorage.setItem('role','Manager')
   return (
-    <div className="manager-dashboard">
+    <div className="manager-dashboard" >
       <Sidebar />
       <div className="manager-main-content">
         <Routes>
@@ -24,8 +24,8 @@ const Dashboard = () => {
             <BillsProvider>
               <MainContent />
           </BillsProvider>} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/ChangePassword" element={<ChangePassword />} />
+          <Route path="/settings" element={<Settings role="manager"/>} />
+          <Route path="/settings/ChangePassword" element={<ChangePassword/>} />
           <Route path="/settings/ChangeNumber" element={<ChangeNumber/>} />
           <Route 
             path="/managebills" 

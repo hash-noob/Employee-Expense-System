@@ -63,3 +63,7 @@
   .claim-info-section{
     height:fit-content;
   }
+
+  .manager-main-content{
+    max-height:100vh;
+  }

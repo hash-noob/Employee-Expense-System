@@ -71,9 +71,10 @@ export const EmployeeProvider = ({ children }) => {
 
   const addEmployee = async (newEmployee) => {
     try {
-      const response = await axios.post('http://localhost:3001/api/user/signup', newEmployee);
+      const response = await axios.post('http://localhost:3001/api/admin/addUser', newEmployee);
       setEmployees((prevEmployees) => [response.data, ...prevEmployees]);
       addActivity({ type: 'added', employee: response.data });
+      console.log('added');
       return true;
     } catch (error) {
       console.error('Failed to add employee:', error);
@@ -117,25 +118,58 @@ export const EmployeeProvider = ({ children }) => {
 
   const deleteEmployee = async (eId) => {
     try {
-      const deletedEmployee = await axios.get(`http://localhost:3001/api/admin/${eId}`,{
-        headers :{
-          Authorization:"Bearer "+localStorage.getItem('token')
+      const deletedEmployee = await axios.get(`http://localhost:3001/api/admin/${eId}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem('token')
         }
-      })
-      console.log(deletedEmployee.data[0].role)
-       await axios.delete(`http://localhost:3001/api/admin/${eId}`,{
-        headers :{
-          Authorization:"Bearer "+localStorage.getItem('token')
+      });
+      console.log(deletedEmployee)
+      let response;
+      if(deletedEmployee.data[0].role==='user'){
+         response = await axios.get(`http://localhost:3001/api/admin/claims/user/${eId}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('token')
+          }
+        });
+      }
+  
+      if (deletedEmployee.data[0].role === 'manager') {
+         response = await axios.get(`http://localhost:3001/api/admin/claims/manager/${eId}`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('token')
+          }
+        });
+      }
+        const pendingClaims = response.data.filter(claim => claim.status === 'pending');
+        console.log(pendingClaims)
+  
+        if (pendingClaims.length > 0) {
+          // Reject all pending claims
+          for (const claim of pendingClaims) {
+            await axios.put(`http://localhost:3001/api/admin/claims/${claim.cId}`, { status: 'rejected' }, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem('token')
+              }
+            });
+          }
+          deletedEmployee.data[0].role==='manager'?alert('All pending claims for the manager have been rejected.'):alert("All pending claims of the Employee have been rejected.");
+        
+      }
+  
+      await axios.delete(`http://localhost:3001/api/admin/${eId}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem('token')
         }
       });
       setEmployees((prevEmployees) =>
         prevEmployees.filter((employee) => employee.eId !== eId)
       );
-      addActivity({ type: 'deleted',  employee: { eId, ...deletedEmployee.data[0] } });
+      addActivity({ type: 'deleted', employee: { eId, ...deletedEmployee.data[0] } });
     } catch (error) {
       console.error('Failed to delete employee:', error);
     }
   };
+  
 
   return (
     <EmployeeContext.Provider value={{ employees,claims,setClaims, addEmployee,addBulkEmployees, updateEmployee, deleteEmployee, activities }}>

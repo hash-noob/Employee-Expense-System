@@ -3,11 +3,14 @@ import ProfilePhoto from './ProfilePhoto';
 import { useNavigate } from 'react-router-dom';
 
 
-const SettingsPage = () => {
-
-  const navigate = useNavigate()
+const SettingsPage = (props) => {
+  const {role} = props;
+  const navigate = useNavigate();
   
   const handleChangePassword = () => {
+    if(role==='manager')
+      navigate('/managerDashboard/settings/ChangePassword')
+    else
     navigate('/dashboard/settings/ChangePassword')
   };
 

@@ -1,5 +1,5 @@
 const userModel = require("../Models/user.model")
-const claimsModel = require("../Models/claims.model")
+const claimModel = require("../Models/claims.model")
 const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -41,12 +41,11 @@ Router.post('/bills',authenticateToken,async (req,res)=>{
 })
 
 
-
 Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
 
     try{
-        const claimbyid=await claimsModel.findOne({"cId":cId});
+        const claimbyid=await claimModel.findOne({"cId":cId});
         res.json(claimbyid)
     }
     catch (err){
@@ -57,15 +56,13 @@ Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
 Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
     const { status } = req.body;
-    console.log("outside")
     try{
-        const updatedClaim = await claimsModel.findOneAndUpdate(
-            {"cId":cId},
-            { status: status } 
+        const {_id} = await claimModel.findOne({"cId":cId})
+        const updatedClaim = await claimModel.findByIdAndUpdate(
+            _id,
+            { status: status }, // Update the status field
+            { new: true } // Return the updated document
         );
-        console.log(updatedClaim)
-        
-        
 
         if (!updatedClaim) {
             console.log('claim not found',cId);
@@ -73,7 +70,14 @@ Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
         }
 
         res.json(updatedClaim);
-       
+        // const {_id} = await claimModel.findOne({"cId":cId})
+        // const updatedClaim = await claimModel.findByIdAndUpdate(_id,{ status: status },{ new: true })
+        // if(updatedClaim){
+        //     res.status(200).json(updatedClaim)
+        // }
+        // else{
+        //     res.status(404).send("error")
+        // }
     }
     catch (err){
         console.log(err)
@@ -83,8 +87,8 @@ Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
 Router.delete('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
     try{
-        const {_id} = await claimsModel.findOne({"cId":cId})
-        const updatedClaim = await claimsModel.findByIdAndDelete(_id)
+        const {_id} = await claimModel.findOne({"cId":cId})
+        const updatedClaim = await claimModel.findByIdAndDelete(_id)
         if(updatedClaim){
             res.status(200).json({message:"claim deleted"})
         }
@@ -141,7 +145,7 @@ Router.get('/bills/:claimId', authenticateToken, async (req, res) => {
   });
   Router.post('/claims', authenticateToken, async (req, res) => {
     try {
-        const newClaim = new claimsModel(req.body);
+        const newClaim = new claimModel(req.body);
         await newClaim.save();
         res.status(201).json(newClaim);
     } catch (err) {
@@ -152,7 +156,7 @@ Router.get('/bills/:claimId', authenticateToken, async (req, res) => {
 Router.put('/claims/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
     try {
-        const updatedClaim = await claimsModel.findByIdAndUpdate(id, req.body, { new: true });
+        const updatedClaim = await claimModel.findByIdAndUpdate(id, req.body, { new: true });
         if (!updatedClaim) {
             return res.status(404).json({ error: 'Claim not found' });
         }

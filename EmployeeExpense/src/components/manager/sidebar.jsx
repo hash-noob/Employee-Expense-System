@@ -81,7 +81,7 @@ const Sidebar = () => {
           Dashboard
         </a>
         <a onClick={() => navigate('/managerDashboard/settings')} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
-          <SettingsIcon className="mr-3" />
+          <SettingsIcon className="mr-3"/>
           Settings
         </a>
         <a onClick={() => navigate('/managerDashboard/history')} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">

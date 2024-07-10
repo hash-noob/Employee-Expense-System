@@ -6,7 +6,7 @@ const HistoryCard = ({ claim }) => {
       <div className="flex-1">
         {/* <p className="text-lg font-semibold">Claim ID: {claim.cId}</p> */}
         <p className="text-lg font-semibold">Claim Title:{claim.title}</p>
-        <p>Manager Name: {claim.mId}</p>
+        <p>Employee Id: {claim.eId}</p>
         <p>Status : {claim.status}</p>
         <p>Total Amount:{claim.totalAmount}</p>
       </div>

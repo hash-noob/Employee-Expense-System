@@ -34,7 +34,7 @@ import Stats from './Stats';
                     </main>
                   } 
             />
-            <Route path='/settings' element={<Settings/>}/>
+            <Route path='/settings' element={<Settings role="user"/>}/>
             <Route path='/settings/ChangePassword' element = {<ChangePassword/>} />
             <Route path='/settings/ChangeNumber' element = {<ChangeNumber/>} />
             <Route path='/history' element={<History/>} />
