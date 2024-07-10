@@ -22,7 +22,7 @@ const Sidebar = () => {
         <div className="text-lg font-bold">Logo</div>
       </div>
       <nav className="flex-1 px-2 space-y-1">
-        <a onClick={()=>{ navigate('/dashboard') }} className="flex items-center px-2 py-2 text-sm font-medium text-white bg-gray-800 rounded-md">
+        <a onClick={()=>{ navigate('/dashboard') }} className="flex items-center px-2 py-2 text-sm font-medium text-white hover:bg-gray-800 rounded-md">
           <DashboardIcon className="mr-3" />
           Dashboard
         </a>

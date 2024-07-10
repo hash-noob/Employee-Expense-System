@@ -95,7 +95,7 @@ const AdminStats = () => {
           {pie && <PieChart>
             <Pie data={categorical_exps} cx="50%" cy="50%" labelLine={false} label={({ _id, percent }) => `${_id} ${(percent * 100).toFixed(1)}%`} outerRadius={100} fill="#8884d8" dataKey="amt">
               {categorical_exps.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${entry}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip />

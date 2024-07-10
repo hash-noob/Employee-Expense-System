@@ -56,7 +56,7 @@ const MainContent = () => {
     };
     console.log(activeTab);
     return (
-        <div className="manager-main-content">
+        <div >
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <div style={{height:"100vh",overflow:"scroll"}}>
             <div className="content">

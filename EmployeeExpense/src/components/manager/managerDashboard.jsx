@@ -10,6 +10,7 @@ import ManageBills from './manageBills.jsx';
 import History from './History.jsx';
 import { BillsProvider } from './BillsContext.jsx';
 import ClaimDetails from './ClaimDetails.jsx';
+import ManagerStats from './ManagerStats.jsx';
 
 import './manager.css';
 
@@ -27,6 +28,7 @@ const Dashboard = () => {
           <Route path="/settings" element={<Settings role="manager"/>} />
           <Route path="/settings/ChangePassword" element={<ChangePassword />} />
           <Route path="/settings/ChangeNumber" element={<ChangeNumber/>} />
+          <Route path='/managerstatistics' element={<ManagerStats/>}/>
           <Route 
             path="/managebills" 
             element={
