@@ -44,6 +44,7 @@ const ManagerStats = () => {
   return (
     <div style={{ marginTop: "40px" }}>
       <div className='mb-8 p-4 bg-white rounded-lg shadow-md hover:shadow-xl'>
+        <div className='text-center text-2xl font-bold'><h1>Statistics</h1></div>
         <h3 className="text-xl font-semibold mb-4">Claims Distribution</h3>
         <ResponsiveContainer width="100%" height={300}>
           {pie && <PieChart>

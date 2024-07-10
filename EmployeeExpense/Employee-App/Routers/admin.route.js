@@ -128,7 +128,7 @@ Router.put('/claims/:cId', authenticateToken, async (req, res) => {
     const { status } = req.body;
   
     try {
-        console.log("inside")
+        
       const updatedClaim = await claimModel.findOneAndUpdate({cId:cId}, { status }, { new: true });
   
       if (!updatedClaim) {
@@ -142,7 +142,7 @@ Router.put('/claims/:cId', authenticateToken, async (req, res) => {
   });
 
 Router.get('/claims/manager/:eId', authenticateToken, async (req, res) => {
-    console.log("hello")
+    
     try {
         const {eId} = req.params;
         const claims = await claimModel.find({mId:eId});
@@ -154,7 +154,7 @@ Router.get('/claims/manager/:eId', authenticateToken, async (req, res) => {
 });
 
 Router.get('/claims/user/:eId', authenticateToken, async (req, res) => {
-    console.log("hello")
+   
     try {
         const {eId} = req.params;
         const claims = await claimModel.find({eId:eId});
@@ -167,7 +167,6 @@ Router.get('/claims/user/:eId', authenticateToken, async (req, res) => {
 
 Router.get('/claims', authenticateToken, async (req, res) => {
     try {
-        console.log("hi")
         const claims = await claimModel.find({});
         res.status(200).json(claims);
     } catch (err) {
@@ -295,7 +294,7 @@ Router.post('/signup-bulk', authenticateToken, async (req, res) => {
 });
 
 Router.get('/', authenticateToken, async (req, res) => {
-    const users = await userModel.find({});
+    const users = await userModel.find({role:{$ne:'admin'}});
     res.status(200).json(users);
 });
 

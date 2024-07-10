@@ -6,7 +6,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    
   }
   
   .card-body {
@@ -59,8 +59,9 @@
 .manager-main-content {
   flex-grow: 1;
   padding: 0; /* Remove padding */
-  margin: 0; /* Remove margin */
-  margin-left: 16rem;
+  /* margin: 0; Remove margin */
+  margin-left:16rem;
+  
 }
 
 .header {
@@ -94,8 +95,6 @@
   overflow:auto;
 }
 
-
-
 .manager-sidebar{
   background-color: #111827;
   color:white;
@@ -109,3 +108,4 @@
   height: 100vh;
   overflow-y: auto; 
 }
+

@@ -59,7 +59,7 @@ const MainContent = () => {
     };
     console.log(activeTab);
     return (
-        <div>
+        <div >
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <div style={{height:"100vh",overflow:"scroll"}}>
             <div className="content">

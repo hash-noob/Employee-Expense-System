@@ -28,11 +28,17 @@ function AddUsers() {
     const eId = form.querySelector("#eId").value;
     const email = form.querySelector("#mail").value;
     const mobileNumber = form.querySelector("#Mnumber").value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if(mobileNumber.length!=10){
       setMessage('Invalid MobileNumber')
       return
     }
+
+    if(!emailRegex.test(email)){
+      setMessage('Invalid Email')
+      return
+    }     
     try {
       const status = await addEmployee({ eId, email, password: eId, role, mobileNumber, username: eId });
       if(status) setMessage(role === 'user' ? 'User added successfully!' : 'Manager added successfully!');

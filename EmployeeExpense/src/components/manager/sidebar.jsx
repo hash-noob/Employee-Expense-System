@@ -24,7 +24,7 @@ const Sidebar = () => {
         <div className="text-lg font-bold">Logo</div>
       </div>
       <nav className="flex-1 px-2 space-y-1">
-        <a onClick={() => navigate('/managerDashboard')} className="flex items-center px-2 py-2 text-sm font-medium text-white bg-gray-800 rounded-md">
+        <a onClick={() => navigate('/managerDashboard')} className="flex items-center px-2 py-2 text-sm font-medium text-white hover:bg-gray-700 rounded-md">
           <DashboardIcon className="mr-3" />
           Dashboard
         </a>
@@ -36,10 +36,10 @@ const Sidebar = () => {
           <HistoryIcon className="mr-3" />
           History
         </a>
-         <a onClick={() => navigate('/managerDashboard/managerstatistics')} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
+        <a onClick={() => navigate('/managerDashboard/managerstatistics')} className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700">
           <BarChartIcon className="mr-3" />
           Statistics
-        </a> 
+        </a>
       </nav>
       <div className="px-2 py-2 mt-auto">
         <a href="#" className="flex items-center px-2 py-2 text-sm font-medium text-white rounded-md hover:bg-gray-700" onClick={handleLogout}>

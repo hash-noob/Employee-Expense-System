@@ -32,7 +32,10 @@ const Popup = ({ employee, onClose, onSave }) => {
           </label>
           <label>
             Role:
-            <input type="text" name="role" value={formData.role} onChange={handleChange} />
+            <select className="w-full px-3 py-2 border rounded"  type="text" name="role" value={formData.role} onChange={handleChange} >
+              <option value="user">User</option>
+              <option value="manager">Manager</option>
+            </select>
           </label>
           <label>
             Phone:
