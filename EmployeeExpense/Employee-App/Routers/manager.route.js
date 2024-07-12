@@ -31,6 +31,61 @@ function authenticateToken(req, res, next) {
     }
 })
 
+const mergeArrays = (array1, array2) => {
+    const merged = array1.map((item, index) => ({
+        _id: item._id,
+        bills: item.bills,
+        claims: array2[index] ? array2[index].claims : 0
+    }));
+    return merged;
+};
+
+Router.get('/stats', async (req, res) => {
+    try {
+        const monthly_bills = await billsModel.aggregate([{
+            $group: {
+                _id: { $month: "$datedOn" },
+                bills: { $sum: "$billAmount" }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const monthly_claims = await claimModel.aggregate([{
+            $group: {
+                _id: { $month: "$createdAt" },
+                claims: { $sum: "$totalAmount" }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const settled_claims = await claimModel.aggregate([{
+            $match: { status: "approved" }
+        }, {
+            $group: {
+                _id: { $month: "$createdAt" },
+                count: { $sum: 1 }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const category_exps = await billsModel.aggregate([{
+            $group: {
+                _id: "$category",
+                amt: { $sum: "$billAmount" }
+            }
+        }]);
+
+        const monthly_exps = mergeArrays(monthly_bills, monthly_claims);
+
+        res.status(200).json({ monthly_exps, category_exps, settled_claims });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err.message });
+    }
+});
 Router.post('/bills',authenticateToken,async (req,res)=>{
     const bills = req.body;
     try{
@@ -95,17 +150,14 @@ Router.put('/bills/:billid',authenticateToken,async (req,res)=>{
 Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
     const { status } = req.body;
+    const {remarks}=req.body;
     try{
         const {_id} = await claimModel.findOne({"cId":cId})
         const updatedClaim = await claimModel.findByIdAndUpdate(
             _id,
-            { status: status },
+            { status: status, remarks:remarks },
             { new: true } 
         );
-        // const billsArray = updatedClaim.data[0].billsArray;
-        // console.log("--------")
-        // console.log(billsArray)
-       
         if (!updatedClaim) {
             console.log('claim not found',cId);
             return res.status(404).json({ error: 'Claim not found' });

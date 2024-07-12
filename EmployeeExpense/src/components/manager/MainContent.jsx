@@ -4,6 +4,7 @@ import './manager.css'; // Assuming you have some basic CSS for styling
 import { Routes, Route,useNavigate } from 'react-router-dom';
 import ClaimDetails from './ClaimDetails';
 import Header from './Header'
+import Image  from '../../assets/claimImage.png'
 const MainContent = () => {
     const [activeTab, setActiveTab] = useState('pending');
     const [claims, setClaims] = useState([]);
@@ -41,6 +42,8 @@ const MainContent = () => {
     }, [activeTab]);
 
     const RenderClaims = ({claims}) => {
+        console.log(claims.length)
+        if(claims.length !=0){
         return claims.map(claim =>{
             console.log("hi",claim.status)
             return (
@@ -56,6 +59,15 @@ const MainContent = () => {
                 <p>To Date: {new Date(claim.toDate).toLocaleDateString()}</p>
             </div>
         )});
+    }
+    else{
+        return (
+            <div className="flex flex-col items-center justify-center min-h-auto">
+            <img src={Image} alt="No Claims" className="w-1/4 h-1/4"/>
+            <p className="text-lg font-bold">No claims available</p> 
+          </div>
+        )
+    }
     };
     console.log(activeTab);
     return (
