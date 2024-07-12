@@ -18,14 +18,6 @@ function authenticateToken(req, res, next) {
     });
   }
 
-  const mergeArrays = (array1, array2) => {
-    const merged = array1.map((item, index) => ({
-        _id: item._id,
-        bills: item.bills,
-        claims: array2[index] ? array2[index].claims : 0
-    }));
-    return merged;
-};
 
 Router.get('/stats', async (req, res) => {
     try {
