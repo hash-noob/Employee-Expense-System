@@ -11,7 +11,8 @@ const claimsschema=mongoose.Schema({
     comments : String,
     totalAmount:Number,
     fromDate:Date,
-    toDate:Date
+    toDate:Date,
+    remarks:String
 }, { timestamps: true })
 const claimsModel=mongoose.model("claims",claimsschema)
 module.exports=claimsModel

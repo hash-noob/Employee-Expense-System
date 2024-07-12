@@ -4,6 +4,7 @@ import './manager.css'; // Assuming you have some basic CSS for styling
 import { Routes, Route,useNavigate } from 'react-router-dom';
 import ClaimDetails from './ClaimDetails';
 import Header from './Header'
+import Image  from '../../assets/claimImage.png'
 const MainContent = () => {
     const [activeTab, setActiveTab] = useState('pending');
     const [claims, setClaims] = useState([]);
@@ -31,6 +32,7 @@ const MainContent = () => {
                     }
                 });
                 setClaims(response.data);
+                
             } catch (error) {
                console.log(error)
             } 
@@ -40,8 +42,12 @@ const MainContent = () => {
     }, [activeTab]);
 
     const RenderClaims = ({claims}) => {
-        return claims.map(claim => (
-            <div className="card" key={claim.cId} onClick={() =>{navigate(`/managerDashboard/claims/${claim.cId}`)
+        console.log(claims.length)
+        if(claims.length !=0){
+        return claims.map(claim =>{
+            console.log("hi",claim.status)
+            return (
+            <div className="card" key={claim.cId} onClick={() =>{navigate(`/managerDashboard/claims`)
                                                                 setSelectedClaim(claim)
                                                                 localStorage.setItem('claim',JSON.stringify(claim))}}>
                 <p>Employee ID: {claim.eId}</p>
@@ -52,7 +58,16 @@ const MainContent = () => {
                 <p>From Date: {new Date(claim.fromDate).toLocaleDateString()}</p>
                 <p>To Date: {new Date(claim.toDate).toLocaleDateString()}</p>
             </div>
-        ));
+        )});
+    }
+    else{
+        return (
+            <div className="flex flex-col items-center justify-center min-h-auto">
+            <img src={Image} alt="No Claims" className="w-1/4 h-1/4"/>
+            <p className="text-lg font-bold">No claims available</p> 
+          </div>
+        )
+    }
     };
     console.log(activeTab);
     return (
@@ -62,7 +77,7 @@ const MainContent = () => {
             <div className="content">
                 <Routes>
                     <Route path="/" element={<RenderClaims claims={claims} /> }/>
-                    <Route path="/claims/:cId" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
+                    <Route path="/claims" element={<ClaimDetails claim ={selectedClaim} activeTab={activeTab}/>} />
                 </Routes>
             </div>
             </div>

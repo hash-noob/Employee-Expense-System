@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../Models/user.model');
 const claimModel = require('../Models/claims.model');
 const billsModel = require('../Models/bills.model')
-const sendMail = require('../mailer'); // Import the mailer
+const sendMail = require('../mailer');
 const { Edit } = require('@mui/icons-material');
 const Router = express.Router();
 
@@ -80,9 +80,6 @@ Router.post('/addUser', authenticateToken, async (req, res) => {
         res.status(500).send('Error adding user');
     }
 });
-
-
-
 
 Router.get('/stats', async (req, res) => {
     try {

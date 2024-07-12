@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Sidebar from './sidebar.jsx';
 import MainContent from './MainContent.jsx';
@@ -6,11 +5,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Settings from '../Setting/Settings';
 import ChangePassword from '../Setting/ChangePassword';
 import ChangeNumber from '../Setting/ChangeNumber';
-import ManageBills from './manageBills.jsx';
+//import ManageBills from './manageBills.jsx';
 import History from './History.jsx';
 import { BillsProvider } from './BillsContext.jsx';
-import ClaimDetails from './ClaimDetails.jsx';
 import ManagerStats from './ManagerStats.jsx';
+import ClaimDetails from './ClaimDetails.jsx';
 
 import './manager.css';
 
@@ -29,16 +28,8 @@ const Dashboard = () => {
           <Route path="/settings/ChangePassword" element={<ChangePassword />} />
           <Route path="/settings/ChangeNumber" element={<ChangeNumber/>} />
           <Route path='/managerstatistics' element={<ManagerStats/>}/>
-          <Route 
-            path="/managebills" 
-            element={
-              <ManageBills
-                onApprove={(claim) => console.log('Claim approved:', claim)}
-                onReject={(claim) => console.log('Claim rejected:', claim)}
-              />
-            } 
-          />
           <Route path="/history" element={<History/>}/>
+          <Route path='/managerstatistics' element={<ManagerStats/>}/>
         </Routes>
       </div>
     </div>

@@ -10,6 +10,9 @@ const ClaimItem = ({ claim }) => {
         <p>Status : {claim.status}</p>
         <p>Associated Bills: {bills}</p>
         <p>Total Amount: Rs.{claim.totalAmount}</p>
+        {claim.remarks && claim.remarks.length > 0 && (
+          <p>Remarks: {claim.remarks}</p>
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const express = require("express")
+//const sendMail=require('../mailer')
 const Router = express.Router()
 
 function authenticateToken(req, res, next) {
@@ -87,7 +88,61 @@ Router.get('/stats', async (req, res) => {
     }
 })
 
+const mergeArrays = (array1, array2) => {
+    const merged = array1.map((item, index) => ({
+        _id: item._id,
+        bills: item.bills,
+        claims: array2[index] ? array2[index].claims : 0
+    }));
+    return merged;
+};
 
+Router.get('/stats', async (req, res) => {
+    try {
+        const monthly_bills = await billsModel.aggregate([{
+            $group: {
+                _id: { $month: "$datedOn" },
+                bills: { $sum: "$billAmount" }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const monthly_claims = await claimModel.aggregate([{
+            $group: {
+                _id: { $month: "$createdAt" },
+                claims: { $sum: "$totalAmount" }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const settled_claims = await claimModel.aggregate([{
+            $match: { status: "approved" }
+        }, {
+            $group: {
+                _id: { $month: "$createdAt" },
+                count: { $sum: 1 }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const category_exps = await billsModel.aggregate([{
+            $group: {
+                _id: "$category",
+                amt: { $sum: "$billAmount" }
+            }
+        }]);
+
+        const monthly_exps = mergeArrays(monthly_bills, monthly_claims);
+
+        res.status(200).json({ monthly_exps, category_exps, settled_claims });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err.message });
+    }
+});
 Router.post('/bills',authenticateToken,async (req,res)=>{
     const bills = req.body;
     try{
@@ -97,7 +152,6 @@ Router.post('/bills',authenticateToken,async (req,res)=>{
         console.log(err)
     }
 })
-
 
 Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
@@ -111,31 +165,62 @@ Router.get('/claimbyid/:id',authenticateToken,async (req,res)=>{
         res.status(500).json({error:'An error occured while retrieving expenses'})
     }
 })
+Router.get('/bills/:billid',authenticateToken,async (req,res)=>{
+    const billId=req.params.billid;
+    // const {status}=req.body;
+    try{
+        const Bill = await billsModel.findOne({"billId":billId})
+        if (!Bill) {
+            console.log('bill not found',billId);
+            return res.status(404).json({ error: 'Bill not found' });
+        }
+        //console.log("bill found")
+        res.json(Bill);
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
+Router.put('/bills/:billid',authenticateToken,async (req,res)=>{
+    const billId=req.params.billid;
+    const {status}=req.body;
+    try{
+        const {_id} = await billsModel.findOne({"billId":billId})
+        const updatedBill = await billsModel.findByIdAndUpdate(
+            _id,
+            { status: status },
+            { new: true } 
+        );
+       
+        if (!updatedBill) {
+            console.log('bill not found',billId);
+            return res.status(404).json({ error: 'Bill not found' });
+        }
+        res.json(updatedBill);
+    }
+    catch (err){
+        console.log(err)
+        res.status(500).json({error:'An error occured while retrieving expenses'})
+    }
+})
 Router.put('/claimbyid/:id',authenticateToken,async (req,res)=>{
     const cId=req.params.id;
     const { status } = req.body;
+    const {remarks}=req.body;
     try{
         const {_id} = await claimModel.findOne({"cId":cId})
         const updatedClaim = await claimModel.findByIdAndUpdate(
             _id,
-            { status: status }, // Update the status field
-            { new: true } // Return the updated document
+            { status: status, remarks:remarks },
+            { new: true } 
         );
-
         if (!updatedClaim) {
             console.log('claim not found',cId);
             return res.status(404).json({ error: 'Claim not found' });
         }
 
         res.json(updatedClaim);
-        // const {_id} = await claimModel.findOne({"cId":cId})
-        // const updatedClaim = await claimModel.findByIdAndUpdate(_id,{ status: status },{ new: true })
-        // if(updatedClaim){
-        //     res.status(200).json(updatedClaim)
-        // }
-        // else{
-        //     res.status(404).send("error")
-        // }
     }
     catch (err){
         console.log(err)
