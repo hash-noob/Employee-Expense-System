@@ -16,6 +16,63 @@ function authenticateToken(req, res, next) {
       next();
     });
   }
+
+  const mergeArrays = (array1, array2) => {
+    const merged = array1.map((item, index) => ({
+        _id: item._id,
+        bills: item.bills,
+        claims: array2[index] ? array2[index].claims : 0
+    }));
+    return merged;
+};
+
+Router.get('/stats', async (req, res) => {
+    try {
+        const monthly_bills = await billsModel.aggregate([{
+            $group: {
+                _id: { $month: "$datedOn" },
+                bills: { $sum: "$billAmount" }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const monthly_claims = await claimModel.aggregate([{
+            $group: {
+                _id: { $month: "$createdAt" },
+                claims: { $sum: "$totalAmount" }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const settled_claims = await claimModel.aggregate([{
+            $match: { status: "approved" }
+        }, {
+            $group: {
+                _id: { $month: "$createdAt" },
+                count: { $sum: 1 }
+            }
+        }, {
+            $sort: { "_id": 1 }
+        }]);
+
+        const category_exps = await billsModel.aggregate([{
+            $group: {
+                _id: "$category",
+                amt: { $sum: "$billAmount" }
+            }
+        }]);
+
+        const monthly_exps = mergeArrays(monthly_bills, monthly_claims);
+
+        res.status(200).json({ monthly_exps, category_exps, settled_claims });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+  
   Router.get('/claims', authenticateToken, async (req, res) => {
     try {
         const claims = await claimModel.find({
@@ -29,6 +86,7 @@ function authenticateToken(req, res, next) {
         res.status(500).json({ error: 'An error occurred while retrieving claims' });
     }
 })
+
 
 Router.post('/bills',authenticateToken,async (req,res)=>{
     const bills = req.body;

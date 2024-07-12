@@ -9,6 +9,7 @@ import Dashboard from './manager/managerDashboard'
 import AuthProvider, {useAuth} from './AuthProvider'
 import ProtectedRoute from '../routes/ProtectedRoute'
 import { EmployeeProvider } from './admin/EmployeeContext';
+import ForgotPassword from './ForgotPassword'
 import AdminStats from './admin/AdminStats';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/forgotPassword" element={<ForgotPassword/>}/>
           <Route element={<ProtectedRoute/>}>
             <Route path="/dashboard/*" element={<UserDashboard />} />
             <Route path="/adminDashboard/statistics" element={<AdminStats />} />

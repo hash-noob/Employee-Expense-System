@@ -3,21 +3,11 @@ const claimModel = require("../Models/claims.model")
 const billsModel = require("../Models/bills.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const multer = require('multer');
+const sendMail = require("../mailer")
 const express = require("express")
 const claimsmodel = require("../Models/claims.model")
 const Router = express.Router() 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.originalname);
-    },
-});
-  
-const upload = multer({ storage: storage });
 
 async function hashPassword(plainPassword) {
     const saltRounds = 10;
@@ -270,5 +260,32 @@ Router.get('/statistics',authenticateToken,async (req,res)=>{
     }
 })
 
+Router.post('/sendMail', async (req,res)=>{
+    const {email}= req.body
+   
+    try {
+        const user = await userModel.find({"email":email})
+        if(user){
+            console.log(user[0].eId)
+            const token = jwt.sign({"eId":user[0].eId},"secretKey",{expiresIn:"10m"})
+            const to = req.body.email
+            const subject = "Reset Password"
+            const text = `<h1>Reset Your Password</h1>
+                    <p>Click on the following link to reset your password:</p>
+                    <a href="http://localhost:3001/resetPassword/${token}">http://localhost:3001/resetPassword/${token}</a>
+                    <p>The link will expire in 10 minutes.</p>
+                    <p>If you didn't request a password reset, please ignore this email.</p>`;
+            const status = await sendMail(to,subject,text);
+            if(status){
+                res.send('Email sent Succesfully!!')
+            }else{
+                res.send('Unable to send email')
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+})
 
+module.exports.hashPassword = hashPassword
 module.exports = Router 

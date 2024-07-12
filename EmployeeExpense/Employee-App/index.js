@@ -5,8 +5,11 @@ const mongoose = require('mongoose');
 const userRouter = require("./Routers/user.route")
 const adminRouter=require("./Routers/admin.route")
 const managerRouter=require("./Routers/manager.route")
+const userModel = require("./Models/user.model")
+const bcrypt = require('bcryptjs')
+const jwt = require("jsonwebtoken")
 const multer=require("multer");
-const billsmodel = require('./Models/bills.model');
+
 
 
 mongoose.connect("mongodb+srv://koushik110541:mongodb123@mydatabase.gzrfjum.mongodb.net/EmployeeExpenseDB?retryWrites=true&w=majority&appName=MyDatabase"
@@ -41,29 +44,27 @@ app.listen(port,()=>{
     console.log(`The server is listening at ${port}`)
 });
 
-app.post('/imgUpload',upload.single('image'),async (req,res)=>{
-    const {billId} =req.body
-    console.log(req.body)
-    try{const img = await billsmodel.find({billId})
-    img.billImage = req.file.buffer;
-    img.billImage.contentType = req.file.mimetype
-    await newImage.save((err) => {
-        if (err) return res.status(500).send(err);
-        res.status(200).send('Image uploaded successfully!');
-      });}catch(err){
-        console.log(err)
-      }
-})
-
-app.get('/image/:id',async (req, res) => {
-    const billId = req.params.id
- 
-    try{
-     const  image = await billsmodel.find({billId}).billImage
-      if (!image) return res.status(404).send('Image not found');
-      res.contentType(image.billImage.contentType);
-      res.send(image.billImage.data);
-    }catch(err){
-        console.log(err)
+async function hashPassword(plainPassword) {
+    console.log("called")
+    const saltRounds = 10;
+    try {
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hash = await bcrypt.hash(plainPassword, salt);
+      return hash;
+      // Store the hash in your database
+    } catch (err) {
+      console.log(err);
     }
-  });
+}
+
+app.get("/resetPassword/:token",async (req,res)=>{
+    const token = req.params.token
+    jwt.verify(token, "secretKey",async (err, user) => {
+        console.log(user)
+        if (err) return res.sendFile('C:\\Users\\91891\\OneDrive\\Documents\\Employee-Management-System\\EmployeeExpense\\Employee-App\\templates\\PasswordFailed.html');
+        const pass = await hashPassword(user.eId)
+        const status = await userModel.findOneAndUpdate({eId:user.eId},{password:pass})
+        if (status)
+            res.sendFile('C:\\Users\\91891\\OneDrive\\Documents\\Employee-Management-System\\EmployeeExpense\\Employee-App\\templates\\PasswordChangeSucces.html')
+      });
+})

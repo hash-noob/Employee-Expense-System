@@ -27,10 +27,6 @@ const Popup = ({ employee, onClose, onSave }) => {
         <h2>Edit Employee</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Username:
-            <input type="text" name="username" value={formData.username} onChange={handleChange} />
-          </label>
-          <label>
             Role:
             <select className="w-full px-3 py-2 border rounded"  type="text" name="role" value={formData.role} onChange={handleChange} >
               <option value="user">User</option>

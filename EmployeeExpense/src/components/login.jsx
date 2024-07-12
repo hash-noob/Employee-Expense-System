@@ -42,7 +42,7 @@ const handleLogin = async (e) => {
   return (
     <div className='app-container'>
       <div className="form-container">
-        <h2>Login</h2>
+        <h1 className='font-bold text-lg'>Login</h1>
         <form method='post' onSubmit={handleLogin}>
           <div className="form-group">
             <label>Employee Id:</label>
@@ -53,6 +53,7 @@ const handleLogin = async (e) => {
             <PasswordInput  onchange={(e)=>(setPassword(e.target.value))} placeholder='' id='password' />
           </div>
           <button type="submit"  className="btn">Login</button>
+          <div className='text-right text-sm'><a href="#" onClick={()=>{navigate('forgotPassword')}}>Forgot password?</a></div>
           <h2 id="message"></h2>
         </form>
       </div>
