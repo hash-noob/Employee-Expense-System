@@ -31,6 +31,15 @@ app.use(cors({
 }));
 
 
+
+// app.use(express.static(path.join(__dirname, 'build')));
+
+// // Handle all other routes by serving the index.html file
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
+
+
   
 app.use("/api/user",userRouter)
 app.use("/api/admin",adminRouter)
