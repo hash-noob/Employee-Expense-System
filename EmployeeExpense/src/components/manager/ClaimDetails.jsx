@@ -256,10 +256,10 @@ const ClaimDetails = ({ claim }) => {
       });
       await Promise.all(updateBillPromises);
 
-      alert(`Claim ${action === 'approve' ? 'Approved' : 'Rejected'}`);
+      alert(`Claim ${action === 'approved' ? 'Approved' : 'Rejected'}`);
       navigate('/managerDashboard');
     } catch (error) {
-      console.log(`Error ${action === 'approve' ? 'approving' : 'rejecting'} claim:`, error);
+      console.log(`Error ${action === 'approved' ? 'approving' : 'rejecting'} claim:`, error);
     }
   };
 

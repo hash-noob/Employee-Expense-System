@@ -144,8 +144,7 @@ Router.get('/managers',async (req,res)=>{
 Router.post('/bills', async (req, res) => {
 
     try {
-      const { eId, billId, billAmount, category, merchant, remark, datedOn, status, paymentMethod } = req.body;
-      const billImage = req.file ? req.file.path : null;
+      const { eId, billId, billAmount,billImage, category, merchant, remark, datedOn, status, paymentMethod } = req.body;
       const newBill = new billsModel({
         eId,
         billId,

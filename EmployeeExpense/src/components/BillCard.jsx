@@ -85,7 +85,7 @@ const BillDetailsPopupPane = ({ onClose, bill }) => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Bill Image:</label>
-             <img src={image} alt="bill_image" />
+             <img src={billImage?billImage:image} alt="bill_image" />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold">Remark:</label>

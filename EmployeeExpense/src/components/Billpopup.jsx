@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { set } from 'date-fns';
+import React, { useState,useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -12,11 +13,32 @@ function BillPopup({ onClose, onSubmit }){
   const [datedOn, setDatedOn] = useState(new Date());
   const [paymentMethod, setPaymentMethod] = useState('');
 
-  const handleFileChange = (e) => {
-    setBillImage(e.target.files[0]);
+  useEffect(()=>{console.log("Image updated" + billImage)},[billImage])
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const base64String = await imageToBase64(file);
+        setBillImage(base64String); // Set base64String to billImage state
+      } catch (error) {
+        console.error("Error converting image to Base64:", error);
+      }
+    }else{
+      console.log("NO file");
+    }
   };
 
-  const handleSubmit = (e) => {
+  function imageToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let eId = localStorage.getItem('eId')
     let status ='pending'
@@ -67,7 +89,7 @@ function BillPopup({ onClose, onSubmit }){
             <label className="block text-gray-700">Upload Bill</label>
             <input 
               type="file" 
-              accept=".pdf, .jpg, .jpeg, .png" 
+              accept=".jpg, .jpeg, .png" 
               onChange={handleFileChange} 
               className="w-full px-3 py-2 border rounded" 
             />
